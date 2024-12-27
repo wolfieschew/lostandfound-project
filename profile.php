@@ -3,38 +3,65 @@ session_start();
 
 // Periksa apakah user sudah login
 if (!isset($_SESSION['user_id'])) {
-  // Jika belum login, redirect ke halaman login
   header("Location: log_in.html");
   exit;
 }
 
-$host = 'localhost'; // Sesuaikan dengan host Anda
-$db = 'lost_and_found_items'; // Nama database Anda
-$user = 'root'; // Username database Anda
-$pass = ''; // Password database Anda
+$host = 'localhost';
+$db = 'lost_and_found_items';
+$user = 'root';
+$pass = '';
 
+// Koneksi ke database
 try {
   $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+  $conn = new mysqli($host, $user, $pass, $db);
+  if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+  }
+
   // Ambil user_id dari session
   $userId = $_SESSION['user_id'];
 
-  // Query data pengguna berdasarkan user_id
+  // Query data pengguna
   $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
   $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
   $stmt->execute();
   $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  // Jika data tidak ditemukan
   if (!$user) {
     echo "Pengguna tidak ditemukan!";
     exit;
   }
+
+  // Query notifikasi
+  $notificationsQuery = "
+        SELECT 
+            notifications.message, 
+            notifications.created_at, 
+            users.first_name
+        FROM 
+            notifications
+        JOIN 
+            users ON notifications.user_id = users.id
+        WHERE 
+            notifications.is_read = 0
+        ORDER BY 
+            notifications.created_at DESC";
+
+  $notificationsResult = $conn->query($notificationsQuery);
+  if (!$notificationsResult) {
+    die("Query Error: " . $conn->error);
+  }
+
+  $unreadCount = $notificationsResult->num_rows;
 } catch (PDOException $e) {
   die("Error: " . $e->getMessage());
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -87,11 +114,11 @@ try {
                 href="user_dashboard.php">Home</a>
             </li>
             </li>
-            <li>
+            <!-- <li>
               <a class="hover:text-gray-500" href="static_menu.html">Static</a>
-            </li>
+            </li> -->
             <li>
-              <a class="hover:text-gray-500" href="message.html">Message</a>
+              <a class="hover:text-gray-500" href="message.php">Message</a>
             </li>
             <li>
               <a class="hover:text-gray-500 border-b-4 border-[#124076] pb-2" href="profile.php">Profile</a>
@@ -100,24 +127,46 @@ try {
               <a class="hover:text-gray-500" href="activity.php">Activity</a>
             </li>
             <li>
-              <a class="hover:text-gray-500" href="about-us.html">About us</a>
+              <a class="hover:text-gray-500" href="about-us.php">About us</a>
             </li>
           </ul>
         </div>
-        <div class="flex items-center gap-6">
-          <button
-            type="button"
-            class="text-white bg-[#124076] p-2 w-full h-full items-center rounded-[20%]">
-            <!-- Notification Icon -->
-            <i
-              style="font-size: 1.5rem; padding-left: 0.5rem"
-              class="bx bxs-bell"></i>
-            <span class="ml-2 text-sm font-medium text-gray-700"></span>
+        <div class="flex items-center gap-6 relative">
+          <!-- Tombol Notifikasi -->
+          <button id="notification-icon" type="button" class="relative text-[#124076] p-0 w-full h-full items-center rounded-[20%]">
+            <i class="bx bxs-bell text-3xl"></i>
+            <!-- Badge -->
+            <?php if ($unreadCount > 0): ?>
+              <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2">
+                <?= $unreadCount ?>
+              </span>
+            <?php endif; ?>
           </button>
+
+          <!-- Dropdown Modal -->
+          <div id="notification-dropdown" class="absolute top-full mt-2 right-0 w-80 bg-white shadow-lg rounded-lg hidden z-20">
+            <ul class="divide-y divide-gray-200">
+              <?php if ($unreadCount > 0): ?>
+                <?php while ($notif = $notificationsResult->fetch_assoc()): ?>
+                  <li class="p-4 hover:bg-gray-100">
+                    <p class="text-sm font-medium text-gray-700">
+                      <?= htmlspecialchars($notif['first_name']) ?>: <?= htmlspecialchars($notif['message']) ?>
+                    </p>
+                    <span class="block text-xs text-gray-500"><?= $notif['created_at'] ?></span>
+                  </li>
+                <?php endwhile; ?>
+              <?php else: ?>
+                <li class="p-4 text-center text-gray-500">No new notifications</li>
+              <?php endif; ?>
+            </ul>
+          </div>
+
+
+          <!-- Menu (Tetap) -->
           <ion-icon
             onclick="onToggleMenu(this)"
             name="menu"
-            class="text-3xl cursor-pointer md:hidden"></ion-icon>
+            class="text-5xl cursor-pointer md:hidden"></ion-icon>
         </div>
       </nav>
     </header>
@@ -125,7 +174,7 @@ try {
 
     <!-- Profile Section -->
 
-    <div class="bg-[#9BB3CD] min-h-screen py-10">
+    <div class="bg-[#91B0D3] min-h-screen py-10">
       <!-- Profile Section -->
       <section class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-8 mb-6">
         <div class="flex items-center justify-between">
@@ -427,6 +476,21 @@ try {
         e.name = e.name === "menu" ? "close" : "menu";
         navLinks.classList.toggle("top-[11%]");
       }
+    </script>
+
+    <script>
+      const notificationIcon = document.getElementById('notification-icon');
+      const notificationDropdown = document.getElementById('notification-dropdown');
+
+      notificationIcon.addEventListener('click', () => {
+        notificationDropdown.classList.toggle('hidden');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!notificationIcon.contains(e.target) && !notificationDropdown.contains(e.target)) {
+          notificationDropdown.classList.add('hidden');
+        }
+      });
     </script>
 
     <!-- Flowbite CDN JS -->

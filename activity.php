@@ -40,6 +40,24 @@ if (isset($_GET['delete_id'])) {
     }
 }
 
+// Ambil notifikasi
+$notificationsQuery = "
+    SELECT 
+        notifications.message, 
+        notifications.created_at, 
+        users.first_name
+    FROM 
+        notifications
+    JOIN 
+        users ON notifications.user_id = users.id
+    WHERE 
+        notifications.is_read = 0
+    ORDER BY 
+        notifications.created_at DESC";
+$notificationsResult = $conn->query($notificationsQuery);
+
+$unreadCount = $notificationsResult ? $notificationsResult->num_rows : 0;
+
 // Menutup koneksi setelah semua operasi selesai
 $conn->close();
 ?>
@@ -75,25 +93,55 @@ $conn->close();
             <div class="nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[60vh] left-0 top-[-100%] md:w-auto w-full flex items-center px-2 lg:px-5 z-10 text-xs lg:text-base">
                 <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
                     <li><a class="hover:text-gray-500" href="user_dashboard.php">Home</a></li>
-                    <li><a class="hover:text-gray-500" href="static_menu.html">Static</a></li>
-                    <li><a class="hover:text-gray-500" href="message.html">Message</a></li>
+                    <!-- <li><a class="hover:text-gray-500" href="static_menu.html">Static</a></li> -->
+                    <li><a class="hover:text-gray-500" href="message.php">Message</a></li>
                     <li><a class="hover:text-gray-500" href="profile.php">Profile</a></li>
                     <li><a class="hover:text-gray-500 border-b-4 border-[#124076] pb-2" href="activity.php">Activity</a></li>
-                    <li><a class="hover:text-gray-500" href="about-us.html">About us</a></li>
+                    <li><a class="hover:text-gray-500" href="about-us.php">About us</a></li>
                 </ul>
             </div>
-            <div class="flex items-center gap-6">
-                <button type="button" class="text-white bg-[#124076] p-2 w-full h-full items-center rounded-[20%]">
-                    <i style="font-size: 1.5rem; padding-left: 0.5rem" class="bx bxs-bell"></i>
-                    <span class="ml-2 text-sm font-medium text-gray-700"></span>
+            <div class="flex items-center gap-6 relative">
+                <!-- Tombol Notifikasi -->
+                <button id="notification-icon" type="button" class="relative text-[#124076] p-0 w-full h-full items-center rounded-[20%]">
+                    <i class="bx bxs-bell text-3xl"></i>
+                    <!-- Badge -->
+                    <?php if ($unreadCount > 0): ?>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2">
+                            <?= $unreadCount ?>
+                        </span>
+                    <?php endif; ?>
                 </button>
-                <ion-icon onclick="onToggleMenu(this)" name="menu" class="text-3xl cursor-pointer md:hidden"></ion-icon>
+
+                <!-- Dropdown Modal -->
+                <div id="notification-dropdown" class="absolute top-full mt-2 right-0 w-80 bg-white shadow-lg rounded-lg hidden z-20">
+                    <ul class="divide-y divide-gray-200">
+                        <?php if ($unreadCount > 0): ?>
+                            <?php while ($notif = $notificationsResult->fetch_assoc()): ?>
+                                <li class="p-4 hover:bg-gray-100">
+                                    <p class="text-sm font-medium text-gray-700">
+                                        <?= htmlspecialchars($notif['first_name']) ?>: <?= htmlspecialchars($notif['message']) ?>
+                                    </p>
+                                    <span class="block text-xs text-gray-500"><?= $notif['created_at'] ?></span>
+                                </li>
+                            <?php endwhile; ?>
+                        <?php else: ?>
+                            <li class="p-4 text-center text-gray-500">No new notifications</li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+
+
+                <!-- Menu (Tetap) -->
+                <ion-icon
+                    onclick="onToggleMenu(this)"
+                    name="menu"
+                    class="text-5xl cursor-pointer md:hidden"></ion-icon>
             </div>
         </nav>
     </header>
 
     <!-- Activity Section -->
-    <div class="bg-[#9BB3CD] min-h-screen py-10">
+    <div class="bg-[#91B0D3] min-h-screen py-10">
         <!-- My Activity Section -->
         <section class="max-w-5xl mx-auto bg-white rounded-md shadow-md p-8">
             <h2 class="text-3xl font-semibold mb-6">My Activity</h2>
@@ -204,6 +252,22 @@ $conn->close();
                 }
             });
         }
+    </script>
+
+    <script>
+        document.getElementById("notification-icon").addEventListener("click", function() {
+            const dropdown = document.getElementById("notification-dropdown");
+            dropdown.classList.toggle("hidden");
+        });
+
+        // Menutup dropdown ketika klik di luar area
+        document.addEventListener("click", function(event) {
+            const dropdown = document.getElementById("notification-dropdown");
+            const button = document.getElementById("notification-icon");
+            if (!dropdown.contains(event.target) && !button.contains(event.target)) {
+                dropdown.classList.add("hidden");
+            }
+        });
     </script>
 </body>
 

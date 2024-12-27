@@ -1,31 +1,94 @@
 <?php
-session_start();
+// Sertakan remember_token.php
+include 'remember_token.php';
 
-// Pastikan pengguna sudah login dan memiliki role user
+// Pastikan pengguna sudah login
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'user') {
-  // Jika tidak, arahkan ke halaman login
   header("Location: log_in.html");
   exit;
 }
 
 // Koneksi ke database
-$host = 'localhost'; // Ganti dengan host database kamu
-$user = 'root';      // Ganti dengan username database kamu
-$password = '';      // Ganti dengan password database kamu
-$dbname = 'lost_and_found_items'; // Ganti dengan nama database kamu
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$dbname = 'lost_and_found_items';
 
 $conn = new mysqli($host, $user, $password, $dbname);
-
-// Cek koneksi
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }
 
-// Ambil semua laporan dari tabel items
-$sql = "SELECT * FROM items ORDER BY date_of_event DESC"; // Menampilkan semua laporan terbaru
+// Ambil parameter pencarian
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+$category = isset($_GET['category']) ? $_GET['category'] : 'all';
+
+// Query SQL
+$sql = "SELECT * FROM items";
+$conditions = [];
+
+// Pencarian berdasarkan kata kunci
+if (!empty($search)) {
+  $searchTerms = explode(' ', $search);
+  foreach ($searchTerms as $term) {
+    $conditions[] = "(LOWER(item_name) LIKE LOWER('%$term%') OR LOWER(description) LIKE LOWER('%$term%'))";
+  }
+}
+
+// Pencarian berdasarkan kategori
+if ($category !== 'all') {
+  $conditions[] = "LOWER(category) = LOWER('$category')";
+}
+
+// Tambahkan kondisi ke query
+if (count($conditions) > 0) {
+  $sql .= " WHERE " . implode(" AND ", $conditions);
+}
+
+$sql .= " ORDER BY date_of_event DESC";
+
+// Eksekusi query
 $result = $conn->query($sql);
 
+// Hitung jumlah laporan
+$totalReports = $result->num_rows;
+
+// Tentukan keterangan berdasarkan kondisi pencarian
+if (!empty($search) || $category !== 'all') {
+  $statusMessage = $totalReports > 1
+    ? "Showing $totalReports items"
+    : ($totalReports === 1
+      ? "Showing 1 item"
+      : "No items match your search.");
+} else {
+  $statusMessage = $totalReports > 1
+    ? "Total Reports: $totalReports"
+    : ($totalReports === 1
+      ? "Total Reports: 1"
+      : "No reports found.");
+}
+
+// Ambil notifikasi dengan nama depan pengguna
+$notificationsResult = $conn->query("
+    SELECT 
+        notifications.message, 
+        notifications.created_at, 
+        users.first_name
+    FROM 
+        notifications
+    JOIN 
+        users ON notifications.user_id = users.id
+    WHERE 
+        notifications.is_read = 0
+    ORDER BY 
+        notifications.created_at DESC
+");
+
+$unreadCount = $notificationsResult->num_rows;
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html>
@@ -78,11 +141,11 @@ $result = $conn->query($sql);
               href="#">Home</a>
           </li>
           </li>
-          <li>
+          <!-- <li>
             <a class="hover:text-gray-500" href="static_menu.html">Static</a>
-          </li>
+          </li> -->
           <li>
-            <a class="hover:text-gray-500" href="message.html">Message</a>
+            <a class="hover:text-gray-500" href="message.php">Message</a>
           </li>
           <li>
             <a class="hover:text-gray-500" href="profile.php">Profile</a>
@@ -91,189 +154,178 @@ $result = $conn->query($sql);
             <a class="hover:text-gray-500" href="activity.php">Activity</a>
           </li>
           <li>
-            <a class="hover:text-gray-500" href="about-us.html">About us</a>
+            <a class="hover:text-gray-500" href="about-us.php">About us</a>
           </li>
         </ul>
       </div>
-      <div class="flex items-center gap-6">
-        <!-- Notification Button -->
-        <button
-          type="button"
-          class="text-white bg-[#124076] p-2 w-full h-full items-center rounded-[20%] hidden md:block">
-          <!-- Notification Icon -->
-          <i
-            style="font-size: 1.5rem; padding-left: 0.5rem"
-            class="bx bxs-bell"></i>
-          <span class="ml-2 text-sm font-medium text-gray-700"></span>
+      <div class="flex items-center gap-6 relative">
+        <!-- Tombol Notifikasi -->
+        <button id="notification-icon" type="button" class="relative text-[#124076] p-0 w-full h-full items-center rounded-[20%]">
+          <i class="bx bxs-bell text-3xl"></i>
+          <!-- Badge -->
+          <?php if ($unreadCount > 0): ?>
+            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2">
+              <?= $unreadCount ?>
+            </span>
+          <?php endif; ?>
         </button>
 
-        <!-- Menu Icon -->
+        <!-- Dropdown Modal -->
+        <div id="notification-dropdown" class="absolute top-full mt-2 right-0 w-80 bg-white shadow-lg rounded-lg hidden z-20">
+          <ul class="divide-y divide-gray-200">
+            <?php if ($unreadCount > 0): ?>
+              <?php while ($notif = $notificationsResult->fetch_assoc()): ?>
+                <li class="p-4 hover:bg-gray-100">
+                  <p class="text-sm font-medium text-gray-700">
+                    <?= htmlspecialchars($notif['first_name']) ?>: <?= htmlspecialchars($notif['message']) ?>
+                  </p>
+                  <span class="block text-xs text-gray-500"><?= $notif['created_at'] ?></span>
+                </li>
+              <?php endwhile; ?>
+            <?php else: ?>
+              <li class="p-4 text-center text-gray-500">No new notifications</li>
+            <?php endif; ?>
+          </ul>
+        </div>
+
+
+        <!-- Menu (Tetap) -->
         <ion-icon
           onclick="onToggleMenu(this)"
           name="menu"
-          class="text-3xl cursor-pointer md:hidden"></ion-icon>
+          class="text-5xl cursor-pointer md:hidden"></ion-icon>
       </div>
 
     </nav>
+    <!-- Announcement Text -->
+    <div class="text-center">
+      <p class=" text-sm md:text-lg text-black bg-blue-100">
+        Kehilangan atau Menemukan Barang? Laporkan Sekarang Melalui Form Ini! <a class="underline text-[#124076] font-semibold ml-2" href="form-pelaporan-hilang.html">Klik Disini</a>
+      </p>
+    </div>
   </header>
   <!-- Header Section -->
 
   <!-- Search Section -->
-  <section class="bg-[#91B0D3] h-[15rem] z-10">
-    <div class="pt-10 relativ">
-      <!-- Dropdown Buttons and Search -->
-      <div
-        class="w-[70%] m-auto mt-5 flex flex-col sm:flex-row items-center gap-4">
-        <!-- Dropdown Button 1 -->
-        <div class="relative inline-block w-full sm:w-auto">
+  <section class="bg-[#91B0D3] h-[15rem] flex flex-col items-center justify-center">
+    <!-- Dropdown Buttons and Search -->
+    <div class="w-full max-w-4xl px-4">
+      <form class="flex flex-col sm:flex-row items-center gap-4 w-full" method="GET" action="">
+        <!-- Dropdown (Select) -->
+        <div class="relative w-full sm:w-auto">
+          <select
+            id="category-dropdown"
+            name="category"
+            class="w-full sm:w-auto flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-black bg-gray-100 border border-gray-300 rounded-lg sm:rounded-l-lg sm:rounded-r-none focus:ring-2 focus:outline-none focus:ring-blue-500">
+            <option value="all" <?= $category === 'all' ? 'selected' : '' ?>>Semua Kategori</option>
+            <option value="Perhiasan Khusus" <?= $category === 'Perhiasan Khusus' ? 'selected' : '' ?>>Perhiasan Khusus</option>
+            <option value="Elektronik" <?= $category === 'Elektronik' ? 'selected' : '' ?>>Elektronik</option>
+            <option value="Buku & Dokumen" <?= $category === 'Buku & Dokumen' ? 'selected' : '' ?>>Buku & Dokumen</option>
+            <option value="Aksesoris Pribadi" <?= $category === 'Aksesoris Pribadi' ? 'selected' : '' ?>>Aksesoris Pribadi</option>
+          </select>
+        </div>
+
+        <!-- Search input and button -->
+        <div class="relative w-full">
+          <input
+            type="search"
+            id="search-dropdown"
+            name="search"
+            class="block p-2.5 w-full z-20 text-sm text-black bg-white rounded-lg sm:rounded-none sm:rounded-r-lg border border-gray-300 focus:text-black focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+            placeholder="Search"
+            value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>" />
           <button
-            type="button"
-            class="bg-[#fff] py-2 px-4 rounded-md shadow-lg w-full sm:w-auto"
-            onclick="toggleDropdown1()">
-            Pelaporan Barang
-            <i style="font-size: 1.1rem;" class='bx bx-chevron-down'></i>
+            type="submit"
+            class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-[#124076] rounded-lg sm:rounded-none sm:rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300">
+            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+            <span class="sr-only">Search</span>
           </button>
+        </div>
+      </form>
+    </div>
+  </section>
 
-          <!-- Dropdown Menu 1 -->
-          <div
-            id="dropdownMenu1"
-            class="absolute mt-2 bg-white border border-gray-300 rounded-md shadow-md w-40 hidden z-20">
-            <ul>
-              <li>
-                <a
-                  href="form-pelaporan-hilang.html"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  Barang Hilang
-                </a>
-              </li>
-              <li>
-                <a
-                  href="form-pelaporan-ditemukan.html"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  Barang Ditemukan
-                </a>
-              </li>
-              <li>
-                <a
-                  href="form-pelaporan-informasi.html"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                  Informasi Barang
-                </a>
-              </li>
-            </ul>
-          </div>
+
+  <section class="bg-[#91B0D3] h-[60rem] sm:h-[50rem] px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto h-full">
+      <!-- Wrapper untuk Keterangan dan Grid -->
+      <div class="px-4 sm:px-6 lg:px-8">
+        <!-- Display Total Reports -->
+        <div class="text-gray-700 text-left text-lg font-medium mb-4">
+          <?= $totalReports > 0 ? "Total Reports: $totalReports" : "No reports found." ?>
         </div>
 
-        <!-- Search input -->
-        <form class="w-full max-w-sm sm:max-w-md lg:max-w-4xl mx-auto px-auto">
-          <div class="flex">
-            <!-- Dropdown (Select) -->
-            <div class="relative">
-              <select
-                id="category-dropdown"
-                class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-black bg-gray-100 border border-gray-300 rounded-l-lg focus:ring-2 focus:outline-none focus:ring-blue-500">
-                <option value="all" selected>All Categories</option>
-                <option value="electronics">Elektronik</option>
-                <option value="books">Buku & Dokument</option>
-                <option value="accessories">Aksesori Pribadi</option>
-                <option value="tools">Peralatan Khusus</option>
-              </select>
-            </div>
-
-            <!-- Search input and button -->
-            <div class="relative w-full">
-              <input
-                type="search"
-                id="search-dropdown"
-                class="block p-2.5 w-full z-20 text-sm text-black bg-white rounded-r-lg border border-gray-300 focus:text-black focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
-                placeholder="Search"
-                required />
-              <button
-                type="submit"
-                class="absolute top-0 right-0 p-2.5 text-sm font-medium h-full text-white bg-[#124076] rounded-r-lg focus:ring-4 focus:outline-none focus:ring-blue-300">
-                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
-                <span class="sr-only">Search</span>
-              </button>
-            </div>
+        <!-- Pembungkus dengan opsi scroll -->
+        <div class="overflow-y-auto h-[44rem] scrollbar-thin scrollbar-thumb-[#124076] scrollbar-track-[#e5e7eb] scrollbar-rounded">
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <?php
+            while ($row = $result->fetch_assoc()) {
+              echo '<div class="bg-white shadow-md rounded-lg overflow-hidden">';
+              echo '<div class="relative">';
+              echo '<div class="absolute top-2 left-2 ' . ($row['type'] == 'hilang' ? 'bg-red-500' : 'bg-green-500') . ' text-white text-xs uppercase font-semibold px-2 py-1 rounded">';
+              echo $row['type'] == 'hilang' ? 'Lost' : 'Found';
+              echo '</div>';
+              echo '<img src="' . $row['photo_path'] . '" alt="' . htmlspecialchars($row['item_name']) . '" class="w-full h-48 object-cover" />';
+              echo '</div>';
+              echo '<div class="p-4">';
+              echo '<h3 class="text-lg font-semibold text-gray-800">' . htmlspecialchars($row['item_name']) . '</h3>';
+              echo '<p class="text-sm text-gray-500 mt-2 flex items-center">';
+              echo '<i class="bx bx-calendar-alt mr-1"></i> ' . htmlspecialchars($row['date_of_event']);
+              echo '</p>';
+              echo '<button class="mt-4 w-full bg-[#124076] text-white text-sm py-2 px-4 rounded hover:bg-[#2e64a1]" onclick="showItemDetails(' . $row['id'] . ')">';
+              echo 'Details';
+              echo '</button>';
+              echo '</div>';
+              echo '</div>';
+            }
+            ?>
           </div>
-        </form>
-
-        <!-- Notification Button -->
-        <div class="sm:ml-auto hidden sm:block">
-          <!-- <button
-              type="button"
-              class="text-white bg-[#124076] p-2 w-full h-full items-center rounded-[20%]"
-            > -->
-          <!-- Notification Icon -->
-          <!-- <i
-                style="font-size: 1.5rem; padding-left: 0.5rem"
-                class="bx bxs-bell"
-              ></i>
-              <span class="ml-2 text-sm font-medium text-gray-700"></span>
-            </button> -->
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Card Section -->
-  <section class="bg-[#91B0D3] h-[100rem] sm:h-[50rem] px-4 sm:px-6 lg:px-8">
-    <div class="container mx-auto">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <?php
-        if ($result->num_rows > 0) {
-          // Loop melalui semua laporan
-          while ($row = $result->fetch_assoc()) {
-            // Tentukan warna dan keterangan status berdasarkan nilai 'type' di database
-            $statusColor = ($row['type'] == 'hilang') ? 'bg-red-500' : 'bg-green-500'; // Warna merah untuk Lost, hijau untuk Found
-            $statusText = ($row['type'] == 'hilang') ? 'Lost' : 'Found'; // Keterangan Lost atau Found
 
-            // Tampilkan setiap laporan dalam bentuk card
-            echo '<div class="bg-white shadow-md rounded-lg overflow-hidden">';
-            echo '<div class="relative">';
-            echo '<div class="absolute top-2 left-2 ' . $statusColor . ' text-white text-xs uppercase font-semibold px-2 py-1 rounded">';
-            echo $statusText; // Menampilkan Lost atau Found
-            echo '</div>';
-            echo '<img src="' . $row['photo_path'] . '" alt="' . $row['item_name'] . '" class="w-full h-48 object-cover" />';
-            echo '</div>';
-            echo '<div class="p-4">';
-            echo '<h3 class="text-lg font-semibold text-gray-800">' . htmlspecialchars($row['item_name']) . '</h3>';
-            echo '<p class="text-sm text-gray-500 mt-2 flex items-center">';
-            echo '<i class="bx bx-calendar-alt mr-1"></i> ' . htmlspecialchars($row['date_of_event']);
-            echo '</p>';
-            echo '<button class="mt-4 w-full bg-[#124076] text-white text-sm py-2 px-4 rounded hover:bg-[#2e64a1]" data-toggle="modal" data-target="#itemModal" data-id="' . $row['id'] . '" onclick="showItemDetails(' . $row['id'] . ')">';
-            echo 'Details';
-            echo '</button>';
-            echo '</div>';
-            echo '</div>';
-          }
-        } else {
-          echo '<p class="text-center text-gray-500">No reports found.</p>';
-        }
-        ?>
-      </div>
-    </div>
-  </section>
-  <!-- End of Card Section -->
+
 
   <!-- Modal -->
   <!-- Modal -->
   <div id="itemModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
     <div class="flex justify-center items-center h-full">
       <div class="bg-white p-6 rounded-lg max-w-lg w-full">
+        <!-- Nama Item -->
         <h2 class="text-xl font-semibold text-gray-800" id="modalItemName">Item Name</h2>
         <p class="text-sm text-gray-500 mt-2" id="modalItemDate">Date: Event Date</p>
         <p class="text-sm text-gray-500 mt-2" id="modalItemCategory">Category: Item Category</p>
         <p class="text-sm text-gray-500 mt-2" id="modalItemLocation">Location: Item Location</p>
+
+        <!-- Deskripsi Item -->
         <p class="mt-4 text-gray-700" id="modalItemDescription">Item Description</p>
-        <img id="modalItemImage" src="" alt="Item Image" class="mt-4 w-full h-48 object-cover">
+
+        <!-- Gambar dengan `object-contain` -->
+        <div class="mt-4 bg-gray-100 rounded-lg overflow-hidden">
+          <img
+            id="modalItemImage"
+            src=""
+            alt="Item Image"
+            class="w-full h-48 object-contain" />
+        </div>
+
+        <!-- Kontak -->
         <p class="text-sm text-gray-500 mt-2" id="modalItemContact">Contact: Contact Info</p>
-        <button id="closeModalBtn" class="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">Close</button>
+
+        <!-- Tombol Tutup -->
+        <button
+          id="closeModalBtn"
+          class="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
+          Close
+        </button>
       </div>
     </div>
   </div>
+
 
 
 
@@ -440,6 +492,24 @@ $result = $conn->query($sql);
       document.getElementById('itemModal').classList.add('hidden');
     });
   </script>
+
+  <script>
+    // Toggle Dropdown
+    document.getElementById('notification-icon').addEventListener('click', function() {
+      const dropdown = document.getElementById('notification-dropdown');
+      dropdown.classList.toggle('hidden');
+    });
+
+    // Tutup dropdown saat klik di luar
+    document.addEventListener('click', function(e) {
+      const icon = document.getElementById('notification-icon');
+      const dropdown = document.getElementById('notification-dropdown');
+      if (!icon.contains(e.target) && !dropdown.contains(e.target)) {
+        dropdown.classList.add('hidden');
+      }
+    });
+  </script>
+
 
   <!-- Flowbite -->
   <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>

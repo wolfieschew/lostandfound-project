@@ -17,6 +17,7 @@ header {
   position: sticky;
   top: 0;
   z-index: 1000;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 
 nav {
@@ -75,26 +76,87 @@ nav ul .sign-up.btn:hover {
 }
 
 /* Header End */
-/* Search Section */
-.search-content {
-  background-color: #e3f2fd;
-  height: 100vh; /* Menggunakan 100vh agar tinggi penuh layar */
+/* jumbotron Section */
+.jumbotron-section {
+  /* Menggunakan gambar sebagai background */
+  background: url('../Assets/img/jumbotron/img-4.jpg') no-repeat center center;
+  background-size: cover; /* Membuat gambar memenuhi seluruh section */
+  height: 91vh; /* Membuat tinggi penuh layar */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #fff; /* Agar teks terlihat di atas gambar */
+  text-align: center; /* Memusatkan teks */
+  padding: 20px; /* Memberi sedikit ruang pada konten */
 }
 
-.search-bar {
+.jumbotron-section::after {
+  content: ''; /* Pseudo-element sebagai overlay */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4); /* Warna hitam dengan transparansi */
+  z-index: 1; /* Pastikan overlay berada di atas gambar latar */
+}
+
+.jumbotron-section .content {
+  position: relative; /* Konten tetap di atas overlay */
+  z-index: 2; /* Pastikan konten di atas overlay */
+}
+
+.jumbotron-section .content h1 {
+  font-size: 2.5rem; /* Ukuran font heading */
+  margin: 20px 0;
+}
+
+.jumbotron-section .content p {
+  font-size: 1.2rem;
+  max-width: 800px; /* Membatasi lebar teks */
+  margin: 0 auto; /* Memusatkan teks */
+}
+
+.jumbotron-section h1 {
+  text-align: center;
+  font-size: 3rem;
+}
+
+.jumbotron-section .content button {
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.3); /* Warna putih dengan transparansi 30% */
+  color: #fff;
+  cursor: pointer;
+  margin-top: 3rem;
+  padding: 15px 10px;
+  border: 1px solid #fff;
+  transition: 0.5s all;
+}
+
+.jumbotron-section .content button:hover {
+  opacity: 0.5;
+}
+
+/* .jumbotron-section h1 span {
+  color: #004274;
+} */
+
+.jumbotron-section p {
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+/* .search-bar {
   display: flex;
   align-items: center;
-  justify-content: center; /* Pastikan elemen di dalamnya juga center */
-  width: 100%; /* Lebar penuh container */
-  max-width: 500px; /* Maksimal lebar */
+  justify-content: center; 
+  width: 100%; 
+  max-width: 500px; 
 }
 
 #search {
-  width: 70%; /* Sesuaikan ukuran elemen input */
+  width: 70%; 
   padding: 10px;
   font-size: 16px;
   border: 1px solid #e3f2fd;
@@ -102,14 +164,14 @@ nav ul .sign-up.btn:hover {
 }
 
 .btn-list {
-  width: 30%; /* Proporsi tombol */
+  width: 30%; 
   padding: 10px;
   font-size: 16px;
   border: 1px solid #e3f2fd;
   border-radius: 0.5rem 0 0 0.5rem;
-}
+} */
 
-/* search section end */
+/* jumbotron section end */
 
 @media (max-width: 600px) {
   nav {
@@ -207,7 +269,7 @@ nav ul .sign-up.btn:hover {
 
 /* How About Section */
 .main-content {
-  padding: 2rem 1rem;
+  padding: 5rem 1rem;
 }
 
 .main-content .main {
@@ -285,7 +347,7 @@ nav ul .sign-up.btn:hover {
 
 /* Advice Section */
 .advice-main {
-  margin-top: 5rem;
+  margin-top: 1rem;
   height: 30vh;
   display: flex;
   justify-content: center;
@@ -331,6 +393,178 @@ nav ul .sign-up.btn:hover {
 }
 
 /* Advice Section */
+
+/* Feedback Rating Section */
+.feedback-section {
+  margin-top: 3rem;
+  padding: 40px 20px;
+  text-align: center;
+  background-color: #F5F7FA;
+}
+
+.feedback-main h3 {
+  margin-top: 3rem;
+  font-size: 1.8rem;
+}
+
+.feedback-main span {
+  color: #0056b3;
+  font-weight: bold;
+}
+
+.feedback-main p {
+  margin: 10px 0 20px;
+  color: #555;
+  font-size: 1rem;
+}
+
+.container {
+  margin-top: 5rem;
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.feedback-card {
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  width: 300px;
+  text-align: left;
+}
+
+.feedback-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.user-info h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.user-info p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+  color: #ff9800; /* Warna untuk bintang rating */
+}
+
+.feedback-text {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* FAQ SECTION */
+/* FAQ Section */
+.faq-section {
+  margin-top: 10rem;
+  padding: 40px 20px;
+}
+
+.faq-main h3 {
+  font-size: 2rem;
+  text-align: center;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.faq-question {
+  background-color: #FFF;
+  color: #000;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.faq-question h4 {
+  color: #000;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.toggle-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.faq-answer {
+  display: none; /* Tersembunyi secara default */
+  padding: 15px 20px;
+  background-color: #fff;
+  color: #333;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.faq-item.open .faq-answer {
+  display: block; /* Tampilkan jawaban jika aktif */
+  background-color: #f0f7ff;
+}
+
+.faq-item.open .toggle-icon {
+  transform: rotate(45deg); /* Ikon berubah saat aktif */
+}
+
+/* FAQ SECTION */
+/* Feedback Rating Section */
+
+/* Dummy Metrics */
+.metrics {
+  display: flex;
+  flex-wrap: wrap; /* Membungkus item jika tidak muat dalam satu baris */
+  justify-content: center;
+  padding: 30px 10px; /* Kurangi padding */
+  background-color: #F5F7FA;
+  gap: 10px; /* Tambahkan jarak antar elemen */
+}
+
+.metric-item {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  margin: 35px; /* Kurangi jarak margin antar item */
+}
+
+.metric-item h3 {
+  font-size: 2rem; /* Sesuaikan ukuran font */
+  color: #004274;
+  margin: 0;
+}
+
+.metric-item p {
+  font-size: 0.9rem; /* Sesuaikan ukuran font */
+  color: #555;
+  margin: 3px 0 0; /* Kurangi jarak margin antar teks */
+}
+
+/* Dummy Metrics */
 
 /* Report Section */
 .report-main {

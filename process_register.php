@@ -17,7 +17,7 @@ try {
         $first_name = $_POST['first_name'];
         $last_name = $_POST['last_name'];
         $phone = $_POST['phone'];
-        
+
         // Validasi password dan konfirmasi password
         if ($password !== $confirm_password) {
             echo "Password dan Konfirmasi Password tidak cocok!";
@@ -66,4 +66,3 @@ try {
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
-?>

@@ -2,7 +2,7 @@
 // Mulai sesi untuk mendapatkan informasi user
 session_start();
 
-var_dump($_POST); // Mencetak semua data yang diterima dari form
+var_dump($_POST); // Debugging: Mencetak semua data yang diterima dari form
 
 // Pastikan pengguna sudah login dan memiliki user_id dalam sesi
 if (!isset($_SESSION['user_id'])) {
@@ -44,10 +44,10 @@ if (isset($_FILES["photo"]) && $_FILES["photo"]["error"] == 0) {
     }
 }
 
-// Pastikan data sudah diterima
-echo "Data Type: " . $type . "<br>"; // Debugging untuk melihat apakah 'type' sudah diterima dengan benar
+// Debugging untuk memastikan data diterima
+echo "Data Type: " . $type . "<br>";
 
-// Query untuk menyimpan data
+// Query untuk menyimpan data ke tabel `items`
 $sql = "INSERT INTO items (type, item_name, category, date_of_event, description, email, phone_number, location, photo_path, user_id)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -55,7 +55,15 @@ $stmt = $conn->prepare($sql);
 $stmt->bind_param("sssssssssi", $type, $item_name, $category, $date_of_event, $description, $email, $phone_number, $location, $photo_path, $user_id);
 
 if ($stmt->execute()) {
-    // Berhasil, alihkan ke halaman dashboard
+    // Jika berhasil disimpan ke tabel `items`, tambahkan notifikasi
+    $notificationMessage = "$first_name melaporkan barang baru: $item_name.";
+    $notif_sql = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
+    $notif_stmt = $conn->prepare($notif_sql);
+    $notif_stmt->bind_param("is", $user_id, $notificationMessage);
+    $notif_stmt->execute();
+    $notif_stmt->close();
+
+    // Redirect ke dashboard
     header("Location: user_dashboard.php");
     exit;
 } else {

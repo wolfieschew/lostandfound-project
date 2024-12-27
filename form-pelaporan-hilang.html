@@ -118,11 +118,14 @@
               <label class="block text-gray-700 text-sm font-bold mb-2">Take a photo of the item</label>
               <div class="border-dashed border-2 border-gray-300 rounded-lg p-6 flex items-center justify-center">
                 <label class="cursor-pointer text-blue-500 hover:underline">
-                  <input type="file" name="photo" class="hidden">
+                  <!-- Tambahkan id="photo" -->
+                  <input type="file" name="photo" id="photo" accept="image/*" class="hidden">
                   Click to Upload or Drag and Drop <br>
                   <span class="text-sm text-gray-500">Max. File size: 15MB</span>
                 </label>
               </div>
+              <!-- Tambahkan elemen img untuk preview gambar -->
+              <img id="photo-preview" src="#" alt="Photo Preview" class="hidden mt-4 w-32 h-32 object-cover rounded-lg" />
             </div>
 
             <!-- Item Info Section -->
@@ -151,6 +154,7 @@
               </div>
             </div>
           </div>
+
 
           <!-- Date Section -->
           <div class="mt-6">
@@ -361,6 +365,42 @@
         dropdown.classList.toggle('hidden'); // Menampilkan atau menyembunyikan dropdown
       }
     </script>
+
+    <!-- Tambahkan skrip ini di bagian bawah sebelum </body> -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const photoInput = document.getElementById('photo');
+        const photoPreview = document.getElementById('photo-preview');
+
+        photoInput.addEventListener('change', function(event) {
+          const file = event.target.files[0];
+
+          if (file) {
+            // Periksa apakah file adalah gambar
+            if (file.type.startsWith('image/')) {
+              const reader = new FileReader();
+
+              reader.onload = function(e) {
+                photoPreview.src = e.target.result;
+                photoPreview.classList.remove('hidden');
+              }
+
+              reader.readAsDataURL(file);
+            } else {
+              alert('Please upload a valid image file.');
+              photoInput.value = ''; // Reset input file
+              photoPreview.src = '#';
+              photoPreview.classList.add('hidden');
+            }
+          } else {
+            // Jika tidak ada file yang dipilih
+            photoPreview.src = '#';
+            photoPreview.classList.add('hidden');
+          }
+        });
+      });
+    </script>
+
     <!-- Flowbite -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
   </body>
