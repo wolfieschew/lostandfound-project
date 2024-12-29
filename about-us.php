@@ -191,30 +191,37 @@ $unreadCount = $notificationsResult ? $notificationsResult->num_rows : 0;
           </div>
         </div>
 
-        <!-- Feedback Description Card -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-2xl font-semibold mb-2">Feedback Description</h2>
-          <p class="text-gray-600 mb-4">
-            How would you describe your experience after using our products for helping you find out your lost item?
-          </p>
-          <textarea
-            class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="4"
-            placeholder="Write your feedback"></textarea>
-        </div>
+        <!-- Feedback Section -->
+        <section class="max-w-4xl grid grid-cols-2 gap-2 mx-auto mt-8">
+          <!-- Give Feedback Card -->
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-semibold mb-2 mt-3">Feedback Description</h2>
+            <p class="text-gray-600 mb-4">
+              How would you describe your experience after using our products for helping you find out your lost item?
+            </p>
+            <textarea
+              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="4"
+              placeholder="Write your feedback"></textarea>
+          </div>
 
-        <!-- Comments and Suggestions Card -->
-        <div class="bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-2xl font-semibold mb-2">Comments and Suggestions</h2>
-          <p class="text-gray-600 mb-4">
-            How would you describe your experience after using our products for helping you find out your lost item?
-          </p>
-          <textarea
-            class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            rows="4"
-            placeholder="Write your comment"></textarea>
-        </div>
-      </section>
+          <!-- Comments and Suggestions Card -->
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-2xl font-semibold mb-2">Comments and Suggestions</h2>
+            <p class="text-gray-600 mb-4">
+              How would you describe your experience after using our products for helping you find out your lost item?
+            </p>
+            <textarea
+              class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="4"
+              placeholder="Write your comment"></textarea>
+
+            <div class="mt-3"></div>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+          </div>
+    </div>
+
+    </section>
     </div>
 
 
@@ -240,7 +247,7 @@ $unreadCount = $notificationsResult ? $notificationsResult->num_rows : 0;
               </h2>
               <ul class="text-white font-medium">
                 <li class="mb-4">
-                  <a href="#" class="hover:underline">About Lost and Found Items</a>
+                  <a href="about-us-non-log.html" class="hover:underline">About Lost and Found Items</a>
                 </li>
               </ul>
             </div>
@@ -260,11 +267,6 @@ $unreadCount = $notificationsResult ? $notificationsResult->num_rows : 0;
                     href="#"
                     class="hover:underline">Found Items</a>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    class="hover:underline">Information about Lost and Found Items</a>
-                </li>
               </ul>
             </div>
             <div>
@@ -274,10 +276,10 @@ $unreadCount = $notificationsResult ? $notificationsResult->num_rows : 0;
               </h2>
               <ul class="text-white font-medium">
                 <li class="mb-4">
-                  <a href="#" class="hover:underline">Feedback</a>
+                  <a href="about-us.php" class="hover:underline">Feedback</a>
                 </li>
                 <li>
-                  <a href="#" class="hover:underline">Terms &amp; Conditions Lost and Found Items</a>
+                  <a href="terms-condition.html" class="hover:underline">Terms &amp; Conditions Lost and Found Items</a>
                 </li>
               </ul>
             </div>

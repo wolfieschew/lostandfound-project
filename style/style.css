@@ -636,14 +636,26 @@ nav ul .sign-up.btn:hover {
   gap: 1rem; /* Jarak antar kolom */
 }
 
+.footer.content {
+  text-decoration: none;
+  list-style: none;
+}
+
 .footer-content h3 {
   font-size: 1.2rem; /* Ukuran teks untuk desktop */
   color: #ffffff;
   margin-bottom: 10px;
 }
 
+.footer-content a {
+  text-decoration: none;
+  list-style: none;
+}
+
 .footer-content ul {
   padding: 0;
+  text-decoration: none;
+  list-style: none;
 }
 
 .footer-content li {
@@ -652,6 +664,9 @@ nav ul .sign-up.btn:hover {
   color: #cccccc;
   font-size: 1rem;
   margin-bottom: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  list-style: none;
 }
 
 /* Footer Section */
@@ -660,10 +675,6 @@ nav ul .sign-up.btn:hover {
 @media (max-width: 768px) {
   html {
     font-size: 80%;
-  }
-
-  nav ul .login-btn {
-    color: #000;
   }
 
   .search-bar {

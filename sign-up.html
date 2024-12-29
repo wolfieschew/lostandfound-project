@@ -30,18 +30,13 @@
             alt="Logo"
           />
         </div>
-        <!-- Bagian kanan -->
         <div class="login-content">
           <div class="login-container">
             <div class="login-welcome">
               <h1>Sign Up</h1>
               <p>Let's get started with creating your new account.</p>
             </div>
-            <form
-              action="process_register.php"
-              method="POST"
-              onsubmit="return validateForm()"
-            >
+            <form id="signUpForm">
               <!-- Email -->
               <input
                 class="input-field"
@@ -110,33 +105,76 @@
                 </label>
               </div>
               <!-- Submit Button -->
-              <button class="btn-submit" type="submit" style="cursor: pointer">
+              <button
+              class="btn-submit"
+              type="button"
+              onclick="submitForm()"
+              style="cursor: pointer"
+              >
                 Sign Up
               </button>
             </form>
             <div class="sign-up btn">
               <p>
                 Already have an account?
-                <a href="log_in.html" style="cursor: pointer">Log in here</a>
+                <a href="log_in.php" style="cursor: pointer">Log in here</a>
               </p>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <!-- Sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Password Validation -->
     <script>
-      function validateForm() {
-        var password = document.getElementById("password").value;
-        var confirm_password =
-          document.getElementById("confirm_password").value;
+      function submitForm() {
+        const form = document.getElementById("signUpForm");
+        const formData = new FormData(form);
 
-        if (password !== confirm_password) {
-          alert("Password dan Konfirmasi Password tidak cocok!");
-          return false; // Menghentikan pengiriman formulir
-        }
-        return true; // Melanjutkan pengiriman formulir
+        fetch("process_register.php", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.text())
+          .then((data) => {
+            if (data.includes("Pendaftaran berhasil")) {
+              Swal.fire({
+                icon: "success",
+                title: "Berhasil!",
+                text: data,
+                confirmButtonText: "OK", // Teks tombol
+                customClass: {
+                  confirmButton: "custom-gray", // Hubungkan ke CSS
+                },
+              }).then(() => {
+                // Redirect ke halaman login setelah SweetAlert ditutup
+                window.location.href = "log_in.php";
+              });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: data,
+                confirmButtonText: "OK",
+                customClass: {
+                  confirmButton: "custom-gray",
+                },
+              });
+            }
+          })
+          .catch(() => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Terjadi kesalahan! Silakan coba lagi.",
+              confirmButtonText: "OK",
+              customClass: {
+                confirmButton: "custom-gray",
+              },
+            });
+          });
       }
-    </script>
+    </script>    
   </body>
 </html>

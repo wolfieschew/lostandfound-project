@@ -31,7 +31,7 @@ body {
 .login-container {
   text-align: center;
   color: #fff;
-  padding: 80px 0px 0px 0px;
+  margin-top: 20vh;
 }
 
 .login-container .login-welcome h1 {
@@ -82,7 +82,7 @@ body {
 }
 
 .login-content .login-container .sign-up.btn {
-  margin-top: 10rem;
+  margin-top: 1rem;
 }
 
 .login-content .login-container .sign-up.btn a {
@@ -105,6 +105,20 @@ body {
 
 .password-input {
   padding-right: 40px; /* Memberi ruang untuk ikon di sebelah kanan input */
+}
+
+.confirm-button {
+  background-color: #6e7881 !important; /* Warna merah */
+  color: #ffffff !important; /* Warna teks putih */
+  border: none !important;
+  padding: 10px 20px !important;
+  font-size: 16px !important;
+  border-radius: 5px !important;
+  cursor: pointer !important;
+}
+
+.confirm-button:hover {
+  background-color: #626b74 !important;
 }
 
 @media (max-width: 1028px) {
@@ -132,7 +146,7 @@ body {
   }
 
   .login-container {
-    padding: 20px 0;
+    margin-top: 5vh;
   }
 
   .login-container .login-welcome h1 {

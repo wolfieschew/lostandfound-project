@@ -57,7 +57,8 @@ try {
       history.go(1);
     };
   </script>
-
+  <!-- BX BX ICONS -->
+  <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100">
@@ -69,7 +70,7 @@ try {
         src="Assets/img/lostnfoundlogowhite.png" />
       <ul class="mt-6 space-y-2">
         <li>
-          <a href="admin_dashboard.php" class="block px-4 py-2 hover:bg-gray-700">Dashboard</a>
+          <a href="admin_dashboard.php" class="block px-4 py-2 border border-red-500 hover:bg-gray-700">Dashboard</a>
         </li>
         <li>
           <a href="admin_items_lost.php" class="block px-4 py-2 hover:bg-gray-700">Items Lost</a>
@@ -80,9 +81,9 @@ try {
         <li>
           <a href="admin_users.php" class="block px-4 py-2 hover:bg-gray-700">Users</a>
         </li>
-        <li>
+        <!-- <li>
           <a href="admin_settings.html" class="block px-4 py-2 hover:bg-gray-700">Settings</a>
-        </li>
+        </li> -->
       </ul>
       <!-- Logout Button -->
       <div class="mt-6">
@@ -98,23 +99,32 @@ try {
         <h2 class="text-2xl font-semibold mb-4">Dashboard</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <!-- Total Users -->
-          <div class="bg-yellow-100 p-4 rounded-lg shadow-md">
-            <h3 class="text-lg font-semibold">Total Users</h3>
-            <p class="text-xl font-bold"><?= $totalUsers ?></p>
+          <div class="bg-yellow-100 p-4 rounded-lg shadow-md flex items-center">
+            <i class='bx bxs-group text-3xl text-yellow-600 mr-4'></i>
+            <div>
+              <h3 class="text-lg font-semibold">Total Users</h3>
+              <p class="text-xl font-bold"><?= $totalUsers ?></p>
+            </div>
           </div>
           <!-- Lost Items -->
-          <div class="bg-blue-100 p-4 rounded-lg shadow-md">
-            <h3 class="text-lg font-semibold">Lost Items</h3>
-            <p class="text-xl font-bold"><?= $totalLostItems ?></p>
+          <div class="bg-red-100 p-4 rounded-lg shadow-md flex items-center">
+            <i class='bx bxs-help-circle text-3xl text-red-600 mr-4'></i>
+            <div>
+              <h3 class="text-lg font-semibold">Lost Items</h3>
+              <p class="text-xl font-bold"><?= $totalLostItems ?></p>
+            </div>
           </div>
           <!-- Found Items -->
-          <div class="bg-green-100 p-4 rounded-lg shadow-md">
-            <h3 class="text-lg font-semibold">Found Items</h3>
-            <p class="text-xl font-bold"><?= $totalFoundItems ?></p>
+          <div class="bg-green-100 p-4 rounded-lg shadow-md flex items-center">
+            <i class='bx bxs-check-circle text-3xl text-green-600 mr-4'></i>
+            <div>
+              <h3 class="text-lg font-semibold">Found Items</h3>
+              <p class="text-xl font-bold"><?= $totalFoundItems ?></p>
+            </div>
           </div>
         </div>
-
       </div>
+
 
       <div class="mt-6 bg-white rounded-lg shadow-lg p-6">
         <h2 class="text-2xl font-semibold mb-4">Recent Activity</h2>

@@ -1,0 +1,420 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Lato", sans-serif;
+  }
+  
+  html,
+  body {
+    height: 100%;
+    width: 100%;
+  }
+  
+  /* Hader */
+  
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+  }
+  
+  nav {
+    padding: 5px 150px; /* Padding tetap untuk ruang internal */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+  }
+  
+  .logo {
+    color: #fff;
+  }
+  
+  nav ul {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+  
+  nav ul li {
+    list-style-type: none;
+  }
+  
+  nav ul .login-btn {
+    border: 1px solid #004274;
+    border-radius: 0.3rem;
+    background-color: #004274;
+    padding: 15px 25px;
+    text-decoration: none;
+    color: #fff;
+  }
+  
+  nav ul .sign-up.btn {
+    border: 2px solid #004274;
+    border-radius: 0.3rem;
+    background-color: #fff;
+    padding: 15px 25px;
+    text-decoration: none;
+    transition: 0.3s;
+    color: #000;
+  }
+  
+  nav ul .sign-up.btn:hover {
+    background-color: #004274;
+    color: #fff;
+  }
+  
+  .menu-icon {
+    display: none;
+  }
+  
+  .menu-icon i {
+    color: #000;
+    font-size: 30px;
+  }
+  
+  /* Header End */
+  
+  
+  @media (max-width: 600px) {
+    nav {
+      padding: 5px 30px;
+    }
+    nav ul {
+      height: 5rem;
+      position: absolute;
+      top: 83px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      text-align: center;
+      background: #fff;
+      gap: 0;
+      overflow: hidden;
+    }
+    nav ul li {
+      padding-top: 10px;
+    }
+    /* Button Nav */
+    nav ul .login-btn {
+      padding: 0 10px;
+      width: 100%;
+      border-radius: 0px;
+      background-color: #fff;
+      border: none;
+    }
+  
+    nav ul .login-btn a,
+    nav ul .sign-up.btn a {
+      color: #000;
+      list-style: none;
+      text-decoration: none;
+    }
+  
+    nav ul .sign-up.btn {
+      border: none;
+      width: 100%;
+      border-radius: 0px;
+      padding: 0 10px;
+    }
+    /* Button Nav */
+    .menu-icon {
+      display: block;
+    }
+    #menuList {
+      transition: all 0.5s;
+    }
+  }
+  
+  
+  /* How About Section */
+  
+  /* How About Section */
+  .main-content {
+    background-color: #F8FAFC;
+    height: 135vh;
+  }
+
+  .main-content .about-us-content {
+    position: relative;
+    height: 30rem;
+    background-image: url(../Assets/img/about-us.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.main-content .about-us-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Warna hitam dengan transparansi */
+    z-index: 1; /* Overlay berada di atas gambar */
+}
+
+.main-content .about-us-content .overlay-text {
+    position: absolute;
+    top: 50%; /* Menempatkan teks di tengah secara vertikal */
+    left: 50%; /* Menempatkan teks di tengah secara horizontal */
+    transform: translate(-50%, -50%); /* Menyesuaikan teks agar benar-benar berada di tengah */
+    color: white; /* Warna teks */
+    text-align: center; /* Meratakan teks di tengah */
+    z-index: 2; /* Memastikan teks berada di atas overlay */
+}
+
+.main-content .about-us-content .overlay-text h1 {
+    font-size: 2.5rem; /* Ukuran font untuk judul */
+    margin: 0;
+}
+
+.main-content .about-us-content .overlay-text p {
+    font-size: 1.25rem; /* Ukuran font untuk paragraf */
+    margin: 1rem 0 0 0;
+}
+
+.about-us-description {
+    padding: 5rem 10%;
+    background-color: #f9f9f9;
+    text-align: left;
+    font-family: Arial, sans-serif;
+}
+
+.about-us-description .first-content .content {
+    margin-bottom: 3rem;
+}
+
+.about-us-description .first-content h1 {
+    margin-bottom: 1rem;
+}
+
+.about-us-description .first-content p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.second-content {
+    text-align: center; /* Menempatkan judul di tengah */
+    padding: 2rem;
+  }
+  
+  .values-container {
+    display: flex;
+    justify-content: center; /* Menjajarkan kotak ke tengah */
+    gap: 2rem; /* Memberikan jarak antar kotak */
+    margin-top: 2rem;
+  }
+  
+  .value-box {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 25%; /* Ukuran kotak, bisa disesuaikan */
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Menambahkan transisi untuk semua perubahan */
+  }
+  
+  .value-box:hover {
+    background-color: #004274; /* Latar belakang biru saat hover */
+    transform: translateY(-5px); /* Efek sedikit terangkat */
+  }
+  
+  .value-box:hover i {
+    color: white; /* Mengubah warna ikon menjadi putih saat hover */
+  }
+  
+  .value-box p {
+    margin: 0;
+    font-size: 1rem;
+    color: #333; /* Menetapkan warna teks default */
+    transition: color 0.3s; /* Menambahkan transisi untuk perubahan warna teks */
+  }
+  
+  .value-box:hover p {
+    color: white; /* Mengubah warna teks menjadi putih saat hover */
+  }
+  
+  .about-us-description ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .about-us-description ul li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .second-content i {
+    color: #004274; /* Warna ikon default */
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    transition: color 0.3s; /* Transisi untuk perubahan warna ikon */
+  }
+  
+
+
+
+/* How About Section */
+
+  
+  /* Footer Section */
+  .footer {
+    display: flex;
+    flex-wrap: wrap; /* Agar elemen turun jika tidak cukup ruang */
+    justify-content: space-between; /* Jarak antar elemen */
+    align-items: flex-start; /* Pastikan elemen berbaris di atas */
+    padding: 40px 20px; /* Padding lebih besar */
+    background-color: #124076; /* Warna tetap */
+    gap: 2rem; /* Jarak antar elemen lebih moderat */
+  }
+  
+  .footer-main {
+    flex: 1 1 10px; /* Lebar fleksibel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .footer-section {
+    display: flex;
+    flex: 1 1 300px; /* Lebar fleksibel lebih besar */
+    justify-content: space-around; /* Jarak antar kolom */
+    flex-wrap: wrap; /* Kolom turun di layar kecil */
+    gap: 1rem; /* Jarak antar kolom */
+  }
+  
+  .footer-content h3 {
+    font-size: 1.2rem; /* Ukuran teks untuk desktop */
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+  
+  .footer-content ul {
+    padding: 0;
+  }
+  
+  .footer-content li {
+    text-decoration: none;
+    list-style: none;
+    color: #cccccc;
+    font-size: 1rem;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  
+  /* Footer Section */
+  
+  /* Responsif untuk layar kecil */
+  @media (max-width: 768px) {
+    html {
+      font-size: 80%;
+    }
+  
+    nav ul .login-btn {
+      color: #000;
+    }
+  
+    .search-bar {
+      flex-direction: column; /* Ubah menjadi kolom */
+      align-items: stretch; /* Buat elemen stretch agar penuh */
+      gap: 10px; /* Jarak antar elemen */
+    }
+  
+    #search,
+    .btn-list {
+      width: 100%; /* Lebar penuh */
+      border-radius: 0.5rem; /* Sesuaikan agar lebih estetis */
+    }
+  
+    .footer {
+      flex-direction: column; /* Atur ulang menjadi kolom */
+      align-items: center;
+      gap: 1rem;
+      text-align: center;
+    }
+  
+    .footer-section {
+      flex-direction: column; /* Atur kolom secara vertikal */
+      align-items: center;
+      gap: 1rem;
+    }
+  
+    .footer-content {
+      align-items: center;
+    }
+  
+    .footer-content h3 {
+      font-size: 1rem; /* Ukuran teks lebih kecil */
+    }
+  
+    .footer-content li {
+      font-size: 0.9rem; /* Ukuran lebih kecil */
+    }
+
+    .main-content .about-us-content {
+        height: 20rem; /* Menurunkan tinggi gambar untuk perangkat kecil */
+      }
+    
+      .main-content .about-us-content .overlay-text h1 {
+        font-size: 2rem; /* Menurunkan ukuran font untuk judul */
+      }
+    
+      .main-content .about-us-content .overlay-text p {
+        font-size: 1.1rem; /* Menurunkan ukuran font untuk paragraf */
+      }
+    
+      .about-us-description {
+        padding: 3rem 5%; /* Menurunkan padding untuk perangkat kecil */
+      }
+    
+      .second-content {
+        padding: 1.5rem;
+      }
+    
+      .values-container {
+        flex-direction: column; /* Mengubah tata letak menjadi kolom */
+        gap: 1.5rem; /* Mengurangi jarak antar kotak */
+      }
+    
+      .value-box {
+        width: 100%; /* Membuat kotak lebar 100% */
+        padding: 1rem; /* Menurunkan padding untuk kotak */
+      }
+    
+      .value-box i {
+        font-size: 2.5rem; /* Mengurangi ukuran ikon untuk perangkat kecil */
+      }
+    
+      .second-content i {
+        font-size: 2rem; /* Mengurangi ukuran ikon untuk perangkat kecil */
+      }
+  }
+  
+  /* Responsif untuk layar sangat kecil */
+  @media (max-width: 480px) {
+    html {
+      font-size: 75%;
+    }
+  
+    #search {
+      font-size: 14px; /* Ukuran font lebih kecil */
+      padding: 8px; /* Padding lebih kecil */
+    }
+  
+    .report-main .report .report-section {
+      flex-direction: column; /* Susun tombol secara vertikal */
+      align-items: center; /* Posisikan tombol di tengah */
+      gap: 1rem; /* Jarak antar tombol */
+    }
+  
+    .report-main .report .report-section .report-btn {
+      width: 100%; /* Buat tombol memiliki lebar penuh */
+      text-align: center; /* Pusatkan teks dalam tombol */
+    }
+  }
+  

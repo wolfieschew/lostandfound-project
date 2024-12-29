@@ -79,9 +79,19 @@ unset($_SESSION['error']); // Hapus pesan setelah ditampilkan
     </div>
   </section>
   <?php if (!empty($error)): ?>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-      alert("<?= htmlspecialchars($error); ?>");
+      Swal.fire({
+        title: 'Error!',
+        text: "<?= htmlspecialchars($error); ?>",
+        icon: 'error',
+        confirmButtonText: 'OK',
+        customClass: {
+          confirmButton: 'confirm-button'
+        }
+      });
     </script>
+
   <?php endif; ?>
 
 </body>

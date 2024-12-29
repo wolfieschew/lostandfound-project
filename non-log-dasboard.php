@@ -56,6 +56,8 @@ if ($result === false) {
     rel="stylesheet" />
   <!-- Flaticon -->
   <link rel='stylesheet' href='https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-straight/css/uicons-solid-straight.css'>
+  <!-- SweetAlert2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.0/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -79,6 +81,7 @@ if ($result === false) {
   <!-- Search Section -->
   <section>
     <div class="search-content">
+      <p class="qoute-search"><i class='bx bxs-quote-left'></i> Jangan khawatir, bersama kami barang Anda yang hilang akan kembali. Gunakan layanan kami untuk memulai pencarian sekarang.</p>
       <form method="GET" action="">
         <div class="search-bar">
           <!-- Dropdown untuk kategori -->
@@ -101,7 +104,7 @@ if ($result === false) {
           <!-- Tombol Submit -->
           <button type="submit" class="btn btn-search"><i style="font-size: 1.1rem" class='bx bx-search'></i></button>
         </div>
-        <p style="text-align: center;">Example: <span style="color: red;">KTM, Dompet, Kunci Motor, Jam Tangan</span></p>
+        <p style="text-align: center; color: #fff;">Example: <span style="color: white;">KTM, Dompet, Kunci Motor, Jam Tangan</span></p>
       </form>
     </div>
   </section>
@@ -110,6 +113,7 @@ if ($result === false) {
   <section>
     <div class="test">
       <h2>Newest <span style="color: #124076;">Report</span> Items</h2>
+      <p style="text-align: center;">Check out the items recently found and shared by students.</p>
       <div class="card-container" id="cardContainer">
         <?php if ($result->num_rows > 0): ?>
           <div class="card-content">
@@ -159,13 +163,11 @@ if ($result === false) {
     </div>
   </section>
 
-
-
   <!-- Modal -->
-  <div id="loginModal" class="modal" style="display: none;">
+  <!-- <div id="loginModal" class="modal">
     <div class="modal-content">
       <span class="close-btn" onclick="closeModal()">&times;</span>
-      <h3 style="margin-bottom: 1rem ;">Silahkan Login untuk Mengakses Details</h3>
+      <h3 style="margin-bottom: 1rem;">Silahkan Login untuk Mengakses Details</h3>
       <p style="margin-bottom: 1rem;">Anda harus login untuk melihat detail laporan ini. Silakan masuk atau daftar untuk melanjutkan.</p>
       <i style="font-size: 100px; color: #124076;" class="fi fi-ss-exclamation"></i>
       <div class="modal-buttons">
@@ -173,9 +175,7 @@ if ($result === false) {
         <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
       </div>
     </div>
-  </div>
-
-
+  </div> -->
 
   <!-- Report Section -->
   <section>
@@ -186,10 +186,10 @@ if ($result === false) {
         </div>
         <div class="report-section">
           <div class="report-btn">
-            <a href="log_in.html"><button type="submit">Saya Telah Kehilangan</button></a>
+            <a href="log_in.php"><button type="submit">Saya Telah Kehilangan</button></a>
           </div>
           <div class="report-btn">
-            <a href="log_in.html"><button type="submit">Saya Telah Menemukan</button></a>
+            <a href="log_in.php"><button type="submit">Saya Telah Menemukan</button></a>
           </div>
         </div>
       </div>
@@ -202,24 +202,31 @@ if ($result === false) {
     <div class="footer">
       <div class="footer-main">
         <div class="fotter-img">
-          <img src="Assets/img/lostnfoundlogowhite.png" height="85px" />
+          <a href="#"><img src="Assets/img/lostnfoundlogowhite.png" height="85px" /></a>
         </div>
       </div>
       <div class="footer-section">
         <div class="footer-content">
           <h3>About</h3>
           <ul>
-            <li>About Lost and Found Items</li>
-            <li>Feedback</li>
-            <li>Terms and Condition Lost And Found Items</li>
+            <a href="about-us-non-log.html">
+              <li>About Lost and Found Items</li>
+            </a>
+            <!-- <a><li>Feedback</li></a> -->
+            <a href="terms-condition.html">
+              <li>Terms and Condition Lost And Found Items</li>
+            </a>
           </ul>
         </div>
         <div class="footer-content">
           <h3>Lost and Found Items</h3>
           <ul>
-            <li>Lost Items</li>
-            <li>Found Items</li>
-            <li>Information About Lost and Found Items</li>
+            <a href="non-log-dasboard.php">
+              <li>Lost Items</li>
+            </a>
+            <a href="non-log-dasboard.php">
+              <li>Found Items</li>
+            </a>
           </ul>
         </div>
       </div>
@@ -303,13 +310,13 @@ if ($result === false) {
 
   <script>
     function showLoginModal() {
-      // Display the modal
-      document.getElementById('loginModal').style.display = 'flex';
+      const modal = document.getElementById('loginModal');
+      modal.classList.add('show'); // Tambahkan kelas 'show'
     }
 
     function closeModal() {
-      // Hide the modal
-      document.getElementById('loginModal').style.display = 'none';
+      const modal = document.getElementById('loginModal');
+      modal.classList.remove('show'); // Hapus kelas 'show'
     }
   </script>
 
@@ -317,6 +324,33 @@ if ($result === false) {
   <script
     src="https://kit.fontawesome.com/f8e1a90484.js"
     crossorigin="anonymous"></script>
+
+  <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.0/dist/sweetalert2.all.min.js"></script>
+
+  <!-- Alert -->
+  <script>
+    function showLoginModal() {
+      Swal.fire({
+        title: 'Silahkan Login untuk Mengakses Details',
+        text: 'Anda harus login untuk melihat detail laporan ini. Silakan masuk atau daftar untuk melanjutkan.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Login',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        customClass: {
+          confirmButton: 'btn-login-custom', // Kelas untuk tombol Login
+          cancelButton: 'btn-cancel-custom' // Kelas untuk tombol Cancel
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = 'log_in.php'; // Redirect ke halaman login
+        }
+      });
+    }
+  </script>
+
 </body>
 
 </html>

@@ -54,39 +54,27 @@
           </li>
           </li>
           <li>
-            <a class="hover:text-gray-500" href="static_menu.html">Static</a>
-          </li>
-          <li>
-            <a class="hover:text-gray-500" href="message.html">Message</a>
+            <a class="hover:text-gray-500" href="message.php">Message</a>
           </li>
           <li>
             <a class="hover:text-gray-500" href="profile.php">Profile</a>
           </li>
           <li>
-            <a class="hover:text-gray-500" href="activity.html">Activity</a>
+            <a class="hover:text-gray-500" href="activity.php">Activity</a>
           </li>
           <li>
-            <a class="hover:text-gray-500" href="about-us.html">About us</a>
+            <a class="hover:text-gray-500" href="about-us.php">About us</a>
           </li>
         </ul>
       </div>
       <div class="flex items-center gap-6">
-        <!-- Notification Button -->
-        <button
-          type="button"
-          class="text-white bg-[#124076] p-2 w-full h-full items-center rounded-[20%] hidden md:flex">
-          <!-- Notification Icon -->
-          <i
-            style="font-size: 1.5rem; padding-left: 0.5rem"
-            class="bx bxs-bell"></i>
-          <span class="ml-2 text-sm font-medium text-gray-700"></span>
-        </button>
-
-          <ion-icon
-            onclick="onToggleMenu(this)"
-            name="menu"
-            class="text-3xl cursor-pointer md:hidden"
-          ></ion-icon>
+       <!-- Tombol Notifikasi -->
+       <button id="notification-icon" type="button" class="relative text-[#124076] p-0 w-full h-full items-center rounded-[20%]">
+        <i class="bx bxs-bell text-3xl"></i>
+        <!-- Badge -->
+          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2">
+          </span>
+      </button>
         </div>
       </nav>
     </header>
@@ -172,8 +160,16 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <div>
               <label class="block text-gray-700 text-sm font-bold mb-2">Contact Information</label>
-              <input type="email" name="email" placeholder="Add your Email" class="w-full border rounded-lg p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-              <input type="text" name="phone_number" placeholder="Add your Phone Number" class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+              <div class="flex items-center border rounded-lg p-2 mb-4 focus-within:ring-2 focus-within:ring-blue-500">
+                <i class='bx bxs-envelope text-[#004274] text-lg'></i>
+                <input type="email" name="email" placeholder="Add your Email" 
+                  class="w-full border-none focus:outline-none px-2" required>
+              </div>              
+              <div class="flex items-center border rounded-lg p-2 mb-4 focus-within:ring-2 focus-within:ring-blue-500">
+                <i class='bx bxl-whatsapp text-green-500 text-lg'></i>
+                <input type="text" name="phone_number" placeholder="+62" 
+                  class="w-full border-none focus:outline-none px-2" required>
+              </div>
             </div>
 
             <!-- Map Section -->
@@ -187,7 +183,9 @@
 
           <!-- Submit Button -->
           <div class="mt-6 text-center">
-            <button type="submit" class="bg-[#124076] text-white px-6 py-2 rounded-lg">Submit</button>
+            <button id="submitReport" type="button" class="bg-[#124076] text-white px-6 py-2 rounded-lg">
+                Submit
+            </button>
           </div>
         </form>
       </div>
@@ -400,6 +398,30 @@
         });
       });
     </script>
+
+    <!-- Sweetalert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+      document.getElementById('submitReport').addEventListener('click', function () {
+    Swal.fire({
+        title: 'Submit Report?',
+        text: "Are you sure you want to submit this report?",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#004274',
+        cancelButtonColor: '#6e7881',
+        confirmButtonText: 'Yes, submit it!',
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Kirim form jika pengguna mengonfirmasi
+            document.querySelector('form').submit();
+        }
+    });
+});
+    </script>
+
 
     <!-- Flowbite -->
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>

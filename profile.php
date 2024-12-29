@@ -416,7 +416,7 @@ try {
               </h2>
               <ul class="text-white font-medium">
                 <li class="mb-4">
-                  <a href="#" class="hover:underline">About Lost and Found Items</a>
+                  <a href="about-us-non-log.html" class="hover:underline">About Lost and Found Items</a>
                 </li>
               </ul>
             </div>
@@ -436,11 +436,6 @@ try {
                     href="#"
                     class="hover:underline">Found Items</a>
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    class="hover:underline">Information about Lost and Found Items</a>
-                </li>
               </ul>
             </div>
             <div>
@@ -450,10 +445,10 @@ try {
               </h2>
               <ul class="text-white font-medium">
                 <li class="mb-4">
-                  <a href="#" class="hover:underline">Feedback</a>
+                  <a href="about-us.php" class="hover:underline">Feedback</a>
                 </li>
                 <li>
-                  <a href="#" class="hover:underline">Terms &amp; Conditions Lost and Found Items</a>
+                  <a href="terms-condition.html" class="hover:underline">Terms &amp; Conditions Lost and Found Items</a>
                 </li>
               </ul>
             </div>

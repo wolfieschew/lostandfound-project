@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome | Lost and Found Items</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="style/about-us-non-log.css" />
+    <!-- Boxicons CSS -->
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Playpen+Sans:wght@300;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header>
+      <nav>
+        <div class="logo">
+          <img src="Assets/img/lostnfoundlogo.png" height="70px" />
+        </div>
+        <ul id="menuList">
+          <li><a class="login-btn" href="log_in.php">Log in</a></li>
+          <li><a class="sign-up btn" href="sign-up.html">Sign Up</a></li>
+        </ul>
+        <div class="menu-icon">
+          <i class="bx bx-menu" onclick="toggleMenu()"></i>
+        </div>
+      </nav>
+    </header>
+    <!-- Header Section -->
+
+    <!-- How About Section -->
+    <section>
+      <div class="main-content">
+        <div class="about-us-content">
+            <div class="overlay-text">
+                <h1>About Us</h1>
+                <p>We provide a platform to help you locate and retrieve lost items with ease.</p>
+            </div>
+        </div>
+
+        <!-- Deskripsi Luar Gambar -->
+        <div class="about-us-description">
+            <div class="first-content">
+                <div class="content">
+                <h1><strong>Who Are We?</strong></h1>
+                <p>We are a dedicated team passionate about helping individuals reconnect with their lost belongings around campus. Our platform leverages cutting-edge technology to simplify the process of finding and recovering lost items. With an easy-to-use interface and commitment to service, we aim to provide peace of mind to every student who has ever experienced the frustration of losing something valuable.</p>
+                </div>
+                <div class="content">
+                <h1><strong>Our Mission</strong></h1>
+                <p>Our mission is to create a seamless and reliable service for finding lost items, ensuring that every user can quickly and easily recover their possessions. We believe in providing solutions that are simple, effective, and secure, helping users regain what’s rightfully theirs in a stress-free manner.</p>
+            </div>
+            </div>
+            <div class="second-content">
+                <h1><strong>Our Values</strong></h1>
+                <div class="values-container">
+                  <div class="value-box">
+                    <i class='bx bx-bulb'></i>
+                    <p>We are committed to honesty and transparency in everything we do.</p>
+                  </div>
+                  <div class="value-box">
+                    <i class='bx bxs-user-plus' ></i>
+                    <p>Our users are at the heart of our services, and we strive to meet their needs with empathy and care.</p>
+                  </div>
+                  <div class="value-box">
+                    <i class='bx bx-bug'></i>
+                    <p>We constantly innovate to improve our platform and make the process of finding lost items more efficient.</p>
+                  </div>
+                </div>
+              </div>
+              
+      </div>
+      </div>
+    </section>
+    <!-- How About Section -->
+
+    
+     
+    
+    <!-- Footer Section -->
+    <section>
+      <div class="footer">
+        <div class="footer-main">
+          <div class="fotter-img">
+            <a href="#"><img src="Assets/img/lostnfoundlogowhite.png" height="85px" /></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <div class="footer-content">
+            <h3>About</h3>
+            <ul>
+              <a href=""><li>About Lost and Found Items</li></a>
+              <!-- <a><li>Feedback</li></a> -->
+              <a href=""><li>Terms and Condition Lost And Found Items</li></a>
+            </ul>
+          </div>
+          <div class="footer-content">
+            <h3>Lost and Found Items</h3>
+            <ul>
+              <a href=""><li>Lost Items</li></a>
+              <a href=""><li>Found Items</li></a>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Footer Section -->
+
+    <script>
+      let menuList = document.getElementById("menuList");
+      menuList.style.maxHeight = "0px";
+
+      function toggleMenu() {
+        if (menuList.style.maxHeight == "0px") {
+          menuList.style.maxHeight = "300px";
+        } else {
+          menuList.style.maxHeight = "0px";
+        }
+      }
+    </script>
+    
+    <script>
+      function toggleFaq(element) {
+      const parent = element.parentElement;
+
+      // Tutup semua FAQ lainnya
+      const allItems = document.querySelectorAll(".faq-item");
+      allItems.forEach((item) => {
+        if (item !== parent) {
+          item.classList.remove("open");
+        }
+      });
+
+      // Toggle FAQ yang dipilih
+      parent.classList.toggle("open");
+    }
+    </script>
+
+    <script
+      src="https://kit.fontawesome.com/f8e1a90484.js"
+      crossorigin="anonymous"
+    ></script>
+    
+  </body>
+</html>

@@ -9,6 +9,7 @@
   body {
     height: 100%;
     width: 100%;
+    background-color: #F8FAFC;
   }
   
   /* Hader */
@@ -79,28 +80,48 @@
   
   /* Search Section */
   .search-content {
-    background-color: #e3f2fd;
-    height: 100vh; /* Menggunakan 100vh agar tinggi penuh layar */
+    background-image: url(../Assets/img/redup-2.jpg);
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Tinggi penuh layar */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    max-width: 100%; /* Hapus batasan lebar */
+    width: 100%; /* Pastikan lebar penuh */
+    padding: 0 20px; /* Tambahkan padding untuk responsivitas */
+  }
+
+  .search-content .qoute-search {
+    width: 60%;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 5rem;
+    color: #fff;
+  }
+
+  .search-content form {
+    width: 100%;
+    max-width: 100%;
   }
   
   .search-bar {
     display: flex;
     align-items: center;
-    justify-content: center; /* Pastikan elemen di dalamnya juga center */
-    width: 100%; /* Lebar penuh container */
-    max-width: 500px; /* Maksimal lebar */
-  }
-  
+    justify-content: center;
+    width: 100%; /* Lebar penuh */
+    max-width: 800px; /* Maksimal lebar lebih besar */
+    margin: 0 auto; /* Pusatkan */
+    gap: 10px; /* Jarak antar elemen */
+}
+
   #search {
     width: 70%; /* Sesuaikan ukuran elemen input */
     padding: 10px;
     font-size: 16px;
     border: 1px solid #e3f2fd;
-    border-radius: 0 0.5rem 0.5rem 0;
+    border-radius: 0.3rem 0.3rem 0.3rem 0.3rem;
   }
   
   .btn-list {
@@ -115,7 +136,7 @@
   /* Report List Section */
 .test h2 {
   text-align: center;
-  margin-top: 2rem ;
+  margin-top: 5rem ;
 }
 .card-container {
   position: relative;
@@ -146,6 +167,7 @@
     overflow: hidden;
     text-align: center;
     position: relative;
+    width: 250px;
     height: 38vh; /* Membiarkan card menyesuaikan tinggi sesuai konten */
     display: flex;
     flex-direction: column; /* Agar konten dalam card menumpuk vertikal */
@@ -179,6 +201,7 @@
 }
 
 .btn-details {
+    cursor: pointer;
     display: inline-block;
     padding: 10px 20px;
     margin-top: 10px;
@@ -264,6 +287,15 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  opacity: 0; /* Awal tidak terlihat */
+  visibility: hidden; /* Awal tidak terlihat */
+  transition: opacity 0.3s ease, visibility 0.3s ease; /* Efek transisi */
+}
+
+/* Ketika modal ditampilkan */
+.modal.show {
+  opacity: 1; /* Modal terlihat */
+  visibility: visible; /* Modal terlihat */
 }
 
 /* Modal Content */
@@ -275,6 +307,12 @@
   max-width: 450px;
   text-align: center;
   position: relative;
+  transform: scale(0.8); /* Awal lebih kecil */
+  transition: transform 0.3s ease; /* Efek zoom */
+}
+
+.modal.show .modal-content {
+  transform: scale(1); /* Memperbesar ke ukuran normal */
 }
 
 /* Close Button */
@@ -545,6 +583,8 @@
     padding: 40px 20px; /* Padding lebih besar */
     background-color: #124076; /* Warna tetap */
     gap: 2rem; /* Jarak antar elemen lebih moderat */
+    text-decoration: none;
+    list-style: none;
   }
   
   .footer-main {
@@ -552,6 +592,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-decoration: none;
+    list-style: none;
   }
   
   .footer-section {
@@ -561,11 +603,16 @@
     flex-wrap: wrap; /* Kolom turun di layar kecil */
     gap: 1rem; /* Jarak antar kolom */
   }
-  
+
   .footer-content h3 {
     font-size: 1.2rem; /* Ukuran teks untuk desktop */
     color: #ffffff;
     margin-bottom: 10px;
+  }
+
+  .footer-content a {
+    text-decoration: none;
+    list-style: none;
   }
   
   .footer-content ul {
@@ -581,11 +628,93 @@
   }
   
   /* Footer Section */
+
+  /* SWEETALERT */
+
+  .swal2-confirm.btn-login-custom {
+    background-color: #124076 !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    font-size: 16px !important;
+}
+
+.swal2-confirm.btn-login-custom:hover {
+    background-color: #0f3552 !important;
+}
+
+.swal2-cancel.btn-cancel-custom {
+    background-color: #6E7881 !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+    border: none !important;
+    font-size: 16px !important;
+}
+
+.swal2-cancel.btn-cancel-custom:hover {
+    background-color: #677079 !important;
+}
+
   
   /* Responsif untuk layar kecil */
   @media (max-width: 768px) {
     html {
       font-size: 80%;
+    }
+
+    nav {
+      padding: 5px 30px;
+    }
+    nav ul {
+      height: 5rem;
+      position: absolute;
+      top: 83px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      text-align: center;
+      background: #fff;
+      gap: 0;
+      overflow: hidden;
+    }
+    nav ul li {
+      padding-top: 10px;
+    }
+    /* Button Nav */
+    nav ul .login-btn {
+      padding: 0 10px;
+      width: 100%;
+      border-radius: 0px;
+      background-color: #fff;
+      border: none;
+      color: black;
+    }
+  
+    nav ul .login-btn a,
+    nav ul .sign-up.btn a {
+      color: #000;
+      list-style: none;
+      text-decoration: none;
+    }
+  
+    nav ul .sign-up.btn {
+      border: none;
+      width: 100%;
+      border-radius: 0px;
+      padding: 0 10px;
+    }
+    /* Button Nav */
+    .menu-icon {
+      display: block;
+    }
+    #menuList {
+      transition: all 0.5s;
+    }
+
+    .search-content .qoute-search {
+      font-size: 1.4rem;
     }
   
     .search-bar {
@@ -665,6 +794,7 @@
       border-radius: 0px;
       background-color: #fff;
       border: none;
+      color: black;
     }
   
     nav ul .login-btn a,

@@ -86,6 +86,20 @@ $notificationsResult = $conn->query("
 
 $unreadCount = $notificationsResult->num_rows;
 
+// Tambahkan pemrosesan data untuk menampilkan tombol WhatsApp
+function formatPhoneNumber($phone)
+{
+  // Hapus karakter non-angka
+  $formatted_number = preg_replace('/\D/', '', $phone);
+  // Tambahkan kode negara +62 jika diperlukan
+  if (substr($formatted_number, 0, 1) === "0") {
+    $formatted_number = "62" . substr($formatted_number, 1);
+  } elseif (substr($formatted_number, 0, 2) !== "62") {
+    $formatted_number = "62" . $formatted_number;
+  }
+  return $formatted_number;
+}
+
 ?>
 
 
@@ -287,24 +301,53 @@ $unreadCount = $notificationsResult->num_rows;
     </div>
   </section>
 
-
-
-
-  <!-- Modal -->
   <!-- Modal -->
   <div id="itemModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
     <div class="flex justify-center items-center h-full">
-      <div class="bg-white p-6 rounded-lg max-w-lg w-full">
+      <div class="bg-white p-6 rounded-lg max-w-2xl w-full relative">
+        <!-- Tombol Close -->
+        <button
+          id="closeModalBtn"
+          class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none">
+          <i class="bx bx-x text-2xl"></i>
+        </button>
+
         <!-- Nama Item -->
         <h2 class="text-xl font-semibold text-gray-800" id="modalItemName">Item Name</h2>
-        <p class="text-sm text-gray-500 mt-2" id="modalItemDate">Date: Event Date</p>
-        <p class="text-sm text-gray-500 mt-2" id="modalItemCategory">Category: Item Category</p>
-        <p class="text-sm text-gray-500 mt-2" id="modalItemLocation">Location: Item Location</p>
+
+        <!-- Date -->
+        <p class="text-sm text-gray-500 mt-4 flex items-center gap-2">
+          <i class='bx bxs-calendar text-lg text-[#124076]'></i>
+          <span id="modalItemDate">Date: Event Date</span>
+        </p>
+
+        <!-- Category -->
+        <p class="text-sm text-gray-500 mt-2 flex items-center gap-2">
+          <i class='bx bxs-category text-lg text-[#124076]'></i>
+          <span id="modalItemCategory">Category: Item Category</span>
+        </p>
+
+        <!-- Location -->
+        <div class="text-sm text-gray-500 mt-2 flex items-center gap-2">
+          <i class='bx bx-current-location text-lg text-[#124076]'></i>
+          <span id="modalItemLocation">Location: Item Location</span>
+          <!-- Tombol Google Maps -->
+          <a
+            id="modalGoogleMapsButton"
+            href="#"
+            target="_blank"
+            class="bg-blue-500 text-white text-xs px-3 py-1 rounded hover:bg-blue-600">
+            View on Maps
+          </a>
+        </div>
 
         <!-- Deskripsi Item -->
-        <p class="mt-4 text-gray-700" id="modalItemDescription">Item Description</p>
+        <div class="mt-4 border border-gray-300 rounded-lg p-4 bg-gray-50">
+          <h3 class="text-sm font-semibold text-gray-700 mb-2">Description:</h3>
+          <p class="text-sm text-gray-600" id="modalItemDescription">Item Description</p>
+        </div>
 
-        <!-- Gambar dengan `object-contain` -->
+        <!-- Gambar -->
         <div class="mt-4 bg-gray-100 rounded-lg overflow-hidden">
           <img
             id="modalItemImage"
@@ -314,14 +357,15 @@ $unreadCount = $notificationsResult->num_rows;
         </div>
 
         <!-- Kontak -->
-        <p class="text-sm text-gray-500 mt-2" id="modalItemContact">Contact: Contact Info</p>
-
-        <!-- Tombol Tutup -->
-        <button
-          id="closeModalBtn"
-          class="mt-4 w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600">
-          Close
-        </button>
+        <div class="mt-4 flex items-center gap-2">
+          <a
+            id="modalWhatsAppButton"
+            href="#"
+            target="_blank"
+            class="bg-green-500 text-white text-xs px-3 py-1 rounded hover:bg-green-600">
+            Contact via WhatsApp
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -329,8 +373,9 @@ $unreadCount = $notificationsResult->num_rows;
 
 
 
-  <!-- Footer Section -->
 
+
+  <!-- Footer Section -->
   <footer class="bg-[#124076]">
     <div class="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
       <div class="md:flex md:justify-between">
@@ -350,7 +395,7 @@ $unreadCount = $notificationsResult->num_rows;
             </h2>
             <ul class="text-white font-medium">
               <li class="mb-4">
-                <a href="#" class="hover:underline">About Lost and Found Items</a>
+                <a href="about-us-non-log.html" class="hover:underline">About Lost and Found Items</a>
               </li>
             </ul>
           </div>
@@ -370,11 +415,6 @@ $unreadCount = $notificationsResult->num_rows;
                   href="#"
                   class="hover:underline">Found Items</a>
               </li>
-              <li>
-                <a
-                  href="#"
-                  class="hover:underline">Information about Lost and Found Items</a>
-              </li>
             </ul>
           </div>
           <div>
@@ -384,10 +424,10 @@ $unreadCount = $notificationsResult->num_rows;
             </h2>
             <ul class="text-white font-medium">
               <li class="mb-4">
-                <a href="#" class="hover:underline">Feedback</a>
+                <a href="about-us.php" class="hover:underline">Feedback</a>
               </li>
               <li>
-                <a href="#" class="hover:underline">Terms &amp; Conditions Lost and Found Items</a>
+                <a href="terms-condition.html" class="hover:underline">Terms &amp; Conditions Lost and Found Items</a>
               </li>
             </ul>
           </div>
@@ -464,7 +504,7 @@ $unreadCount = $notificationsResult->num_rows;
   <script>
     // Fungsi untuk menampilkan modal dan mengisi data
     function showItemDetails(itemId) {
-      // Ambil data detail item berdasarkan ID (gunakan AJAX untuk mengambil data dari server)
+      // Ambil data detail item berdasarkan ID
       fetch('get_item_details.php?id=' + itemId)
         .then(response => response.json())
         .then(data => {
@@ -478,18 +518,47 @@ $unreadCount = $notificationsResult->num_rows;
             document.getElementById('modalItemLocation').innerText = 'Location: ' + data.location;
             document.getElementById('modalItemDescription').innerText = data.description;
             document.getElementById('modalItemImage').src = data.photo_path;
-            document.getElementById('modalItemContact').innerText = 'Contact: ' + data.email + ' / ' + data.phone_number;
 
-            // Tampilkan modal dengan menghapus class hidden
+            // Isi tautan Google Maps
+            const locationCoordinates = data.location; // Pastikan ini berisi koordinat, misalnya: "-6.973250, 107.630339"
+            const googleMapsLink = `https://www.google.com/maps?q=${encodeURIComponent(locationCoordinates)}`;
+            document.getElementById('modalGoogleMapsButton').href = googleMapsLink;
+
+            // Isi tombol WhatsApp
+            const phoneNumber = data.phone_number;
+            const formattedNumber = formatPhoneNumber(phoneNumber);
+            document.getElementById('modalWhatsAppButton').href = `https://wa.me/${formattedNumber}`;
+
+            // Tampilkan modal
             document.getElementById('itemModal').classList.remove('hidden');
           }
         })
         .catch(error => console.error('Error fetching item details:', error));
     }
 
+
+    // Fungsi untuk memformat nomor telepon
+    function formatPhoneNumber(phone) {
+      let formatted_number = phone.replace(/\D/g, '');
+      if (formatted_number.startsWith('0')) {
+        formatted_number = '62' + formatted_number.slice(1);
+      } else if (!formatted_number.startsWith('62')) {
+        formatted_number = '62' + formatted_number;
+      }
+      return formatted_number;
+    }
+
     // Fungsi untuk menutup modal
     document.getElementById('closeModalBtn').addEventListener('click', function() {
       document.getElementById('itemModal').classList.add('hidden');
+    });
+
+    // Fungsi untuk menutup modal jika klik di luar modal
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('itemModal');
+      if (event.target === modal) {
+        modal.classList.add('hidden');
+      }
     });
   </script>
 
