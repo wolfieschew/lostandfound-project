@@ -117,9 +117,9 @@ try {
             <!-- <li>
               <a class="hover:text-gray-500" href="static_menu.html">Static</a>
             </li> -->
-            <li>
+            <!-- <li>
               <a class="hover:text-gray-500" href="message.php">Message</a>
-            </li>
+            </li> -->
             <li>
               <a class="hover:text-gray-500 border-b-4 border-[#124076] pb-2" href="profile.php">Profile</a>
             </li>

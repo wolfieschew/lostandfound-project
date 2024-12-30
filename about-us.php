@@ -94,9 +94,9 @@ $unreadCount = $notificationsResult ? $notificationsResult->num_rows : 0;
             <!-- <li>
               <a class="hover:text-gray-500" href="static_menu.html">Static</a>
             </li> -->
-            <li>
+            <!-- <li>
               <a class="hover:text-gray-500" href="message.php">Message</a>
-            </li>
+            </li> -->
             <li>
               <a class="hover:text-gray-500" href="profile.php">Profile</a>
             </li>

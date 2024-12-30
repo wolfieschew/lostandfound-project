@@ -104,7 +104,7 @@ if ($result === false) {
           <!-- Tombol Submit -->
           <button type="submit" class="btn btn-search"><i style="font-size: 1.1rem" class='bx bx-search'></i></button>
         </div>
-        <p style="text-align: center; color: #fff;">Example: <span style="color: white;">KTM, Dompet, Kunci Motor, Jam Tangan</span></p>
+        <p style="text-align: center; color: #fff;">Contoh: <span style="color: white;">KTM, Dompet, Kunci Motor, Jam Tangan</span></p>
       </form>
     </div>
   </section>
@@ -139,7 +139,7 @@ if ($result === false) {
                     <i class="bx bx-calendar-alt calendar-icon"></i>
                     <?= htmlspecialchars($row['date_of_event']) ?>
                   </p>
-                  <button class="btn btn-details" onclick="showLoginModal()">Details</button>
+                  <button class="btn btn-details" onclick="showLoginModal()">Detail</button>
                 </div>
               </div>
             <?php endwhile; ?>
@@ -332,7 +332,7 @@ if ($result === false) {
   <script>
     function showLoginModal() {
       Swal.fire({
-        title: 'Silahkan Login untuk Mengakses Details',
+        title: 'Silahkan Login untuk Mengakses Detail',
         text: 'Anda harus login untuk melihat detail laporan ini. Silakan masuk atau daftar untuk melanjutkan.',
         icon: 'warning',
         showCancelButton: true,

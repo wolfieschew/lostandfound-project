@@ -129,52 +129,50 @@
     <!-- Password Validation -->
     <script>
       function submitForm() {
-        const form = document.getElementById("signUpForm");
-        const formData = new FormData(form);
+  const form = document.getElementById("signUpForm");
 
-        fetch("process_register.php", {
-          method: "POST",
-          body: formData,
-        })
-          .then((response) => response.text())
-          .then((data) => {
-            if (data.includes("Pendaftaran berhasil")) {
-              Swal.fire({
-                icon: "success",
-                title: "Berhasil!",
-                text: data,
-                confirmButtonText: "OK", // Teks tombol
-                customClass: {
-                  confirmButton: "custom-gray", // Hubungkan ke CSS
-                },
-              }).then(() => {
-                // Redirect ke halaman login setelah SweetAlert ditutup
-                window.location.href = "log_in.php";
-              });
-            } else {
-              Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: data,
-                confirmButtonText: "OK",
-                customClass: {
-                  confirmButton: "custom-gray",
-                },
-              });
-            }
-          })
-          .catch(() => {
-            Swal.fire({
-              icon: "error",
-              title: "Oops...",
-              text: "Terjadi kesalahan! Silakan coba lagi.",
-              confirmButtonText: "OK",
-              customClass: {
-                confirmButton: "custom-gray",
-              },
-            });
-          });
+  // Validasi manual: Pastikan semua input sesuai dengan aturan HTML5
+  if (!form.checkValidity()) {
+    form.reportValidity(); // Tampilkan pesan error bawaan browser
+    return; // Jangan kirim form jika validasi gagal
+  }
+
+  const formData = new FormData(form);
+
+  // Kirim data melalui fetch jika validasi lolos
+  fetch("process_register.php", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.text())
+    .then((data) => {
+      if (data.includes("Pendaftaran berhasil")) {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: data,
+          confirmButtonText: "OK",
+        }).then(() => {
+          window.location.href = "log_in.php";
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: data,
+          confirmButtonText: "OK",
+        });
       }
+    })
+    .catch(() => {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Terjadi kesalahan! Silakan coba lagi.",
+        confirmButtonText: "OK",
+      });
+    });
+}
     </script>    
   </body>
 </html>

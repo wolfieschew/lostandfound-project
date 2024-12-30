@@ -78,7 +78,7 @@ $lostItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body class="bg-gray-100">
   <!-- Sidebar -->
   <div class="flex h-screen">
-    <div class="w-64 bg-[#124076] text-white">
+    <div class="w-[15rem] bg-[#124076] text-white">
       <img
         class="h-[5rem] m-auto mt-[1rem]"
         src="Assets/img/lostnfoundlogowhite.png" />
@@ -86,20 +86,20 @@ $lostItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <li>
           <a
             href="admin_dashboard.php"
-            class="block px-4 py-2 hover:bg-gray-700">Dashboard</a>
+            class="block px-4 py-2 hover:bg-[#4973b3]"><i class='bx bxs-dashboard'></i> Dashboard</a>
         </li>
         <li>
           <a
             href="admin_items_lost.php"
-            class="block px-4 py-2 hover:bg-gray-700">Items Lost</a>
+            class="block px-4 py-2 bg-[#1E5CB8]"><i class='bx bxs-box'></i> Items Lost</a>
         </li>
         <li>
           <a
             href="admin_items_found.php"
-            class="block px-4 py-2 hover:bg-gray-700">Items Found</a>
+            class="block px-4 py-2 hover:bg-[#4973b3]"><i class='bx bxs-box'></i> Items Found</a>
         </li>
         <li>
-          <a href="admin_users.php" class="block px-4 py-2 hover:bg-gray-700">Users</a>
+          <a href="admin_users.php" class="block px-4 py-2 hover:bg-[#4973b3]"><i class='bx bxs-user-circle'></i> Users</a>
         </li>
         <!-- <li>
           <a
@@ -107,19 +107,26 @@ $lostItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
             class="block px-4 py-2 hover:bg-gray-700">Settings</a>
         </li> -->
       </ul>
+      <!-- Logout Button -->
+      <div class="mt-6">
+        <a
+          href="admin_logout.php"
+          class="block px-4 py-2 text-red-500 hover:text-white"><i class='bx bxs-exit'></i> Logout</a>
+      </div>
     </div>
 
     <!-- Main Content -->
     <div class="flex-1 p-6">
       <div class="bg-white rounded-lg shadow-lg p-6">
-        <h2 class="text-2xl font-semibold mb-4">Items Lost</h2>
+        <h2 class="text-2xl font-semibold mb-4">Lost Items Reports</h2>
         <div class="flex justify-between mb-4">
           <form method="GET" action="" class="flex space-x-4">
             <select name="category" class="p-2 bg-gray-100 rounded-lg border border-gray-300">
               <option value="">All Categories</option>
-              <option value="personal">Personal</option>
-              <option value="electronics">Electronics</option>
-              <option value="household">Household</option>
+              <option value="Perhiasan Khusus">Perhiasan Khusus</option>
+              <option value="Elektronik">Elektronik</option>
+              <option value="Buku & Dokumen">Buku & Dokumen</option>
+              <option value="Aksesoris Pribadi">Aksesoris Pribadi</option>
             </select>
             <input
               type="text"

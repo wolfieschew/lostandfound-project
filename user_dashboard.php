@@ -71,6 +71,7 @@ if (!empty($search) || $category !== 'all') {
 // Ambil notifikasi dengan nama depan pengguna
 $notificationsResult = $conn->query("
     SELECT 
+        notifications.id, 
         notifications.message, 
         notifications.created_at, 
         users.first_name
@@ -83,6 +84,7 @@ $notificationsResult = $conn->query("
     ORDER BY 
         notifications.created_at DESC
 ");
+
 
 $unreadCount = $notificationsResult->num_rows;
 
@@ -158,9 +160,9 @@ function formatPhoneNumber($phone)
           <!-- <li>
             <a class="hover:text-gray-500" href="static_menu.html">Static</a>
           </li> -->
-          <li>
+          <!-- <li>
             <a class="hover:text-gray-500" href="message.php">Message</a>
-          </li>
+          </li> -->
           <li>
             <a class="hover:text-gray-500" href="profile.php">Profile</a>
           </li>
@@ -189,11 +191,18 @@ function formatPhoneNumber($phone)
           <ul class="divide-y divide-gray-200">
             <?php if ($unreadCount > 0): ?>
               <?php while ($notif = $notificationsResult->fetch_assoc()): ?>
-                <li class="p-4 hover:bg-gray-100">
-                  <p class="text-sm font-medium text-gray-700">
-                    <?= htmlspecialchars($notif['first_name']) ?>: <?= htmlspecialchars($notif['message']) ?>
-                  </p>
-                  <span class="block text-xs text-gray-500"><?= $notif['created_at'] ?></span>
+                <li id="notification-<?= $notif['id'] ?>" class="p-4 hover:bg-gray-100 flex justify-between items-center">
+                  <div>
+                    <p class="text-sm font-medium text-gray-700">
+                      <?= htmlspecialchars($notif['first_name']) ?>: <?= htmlspecialchars($notif['message']) ?>
+                    </p>
+                    <span class="block text-xs text-gray-500"><?= $notif['created_at'] ?></span>
+                  </div>
+                  <button
+                    class="text-gray-500 hover:text-red-500 text-lg font-bold"
+                    onclick="deleteNotification(<?= $notif['id'] ?>)">
+                    &times; <!-- Gunakan simbol 'x' -->
+                  </button>
                 </li>
               <?php endwhile; ?>
             <?php else: ?>
@@ -201,6 +210,7 @@ function formatPhoneNumber($phone)
             <?php endif; ?>
           </ul>
         </div>
+
 
 
         <!-- Menu (Tetap) -->
@@ -268,7 +278,7 @@ function formatPhoneNumber($phone)
       <div class="px-4 sm:px-6 lg:px-8">
         <!-- Display Total Reports -->
         <div class="text-gray-700 text-left text-lg font-medium mb-4">
-          <?= $totalReports > 0 ? "Total Reports: $totalReports" : "No reports found." ?>
+          <?= $totalReports > 0 ? "Total Laporan: $totalReports" : "Tidak ada Laporan Ditemukan." ?>
         </div>
 
         <!-- Pembungkus dengan opsi scroll -->
@@ -289,7 +299,7 @@ function formatPhoneNumber($phone)
               echo '<i class="bx bx-calendar-alt mr-1"></i> ' . htmlspecialchars($row['date_of_event']);
               echo '</p>';
               echo '<button class="mt-4 w-full bg-[#124076] text-white text-sm py-2 px-4 rounded hover:bg-[#2e64a1]" onclick="showItemDetails(' . $row['id'] . ')">';
-              echo 'Details';
+              echo 'Detail';
               echo '</button>';
               echo '</div>';
               echo '</div>';
@@ -577,6 +587,32 @@ function formatPhoneNumber($phone)
         dropdown.classList.add('hidden');
       }
     });
+  </script>
+
+  <!-- Nontifications -->
+  <script>
+    function deleteNotification(notificationId) {
+      fetch('delete_notification.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: `notification_id=${notificationId}`,
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Notifikasi berhasil dihapus!');
+            location.reload(); // Reload halaman untuk memperbarui daftar notifikasi
+          } else {
+            alert('Gagal menghapus notifikasi: ' + (data.error || ''));
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Terjadi kesalahan saat menghapus notifikasi.');
+        });
+    }
   </script>
 
 

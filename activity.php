@@ -125,7 +125,7 @@ $conn->close();
                 <ul class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
                     <li><a class="hover:text-gray-500" href="user_dashboard.php">Home</a></li>
                     <!-- <li><a class="hover:text-gray-500" href="static_menu.html">Static</a></li> -->
-                    <li><a class="hover:text-gray-500" href="message.php">Message</a></li>
+                    <!-- <li><a class="hover:text-gray-500" href="message.php">Message</a></li> -->
                     <li><a class="hover:text-gray-500" href="profile.php">Profile</a></li>
                     <li><a class="hover:text-gray-500 border-b-4 border-[#124076] pb-2" href="activity.php">Activity</a></li>
                     <li><a class="hover:text-gray-500" href="about-us.php">About us</a></li>
@@ -383,7 +383,7 @@ $conn->close();
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#124076",
-                cancelButtonColor: "#B91C1C",
+                cancelButtonColor: "#6e7881",
                 cancelButtonText: "Batalkan",
                 confirmButtonText: "Ya, Hapus!"
             }).then((result) => {
